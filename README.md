@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # The Gilded Minstrels
 
 An interactive 3D medieval tavern band experience. Four primitive-built musicians sit around a candlelit table — click glowing objects to change songs, click the room to rain beer bottles.
@@ -89,3 +90,7 @@ public/
 - Hidden Easter eggs (click the fireplace 7 times...)
 - Mobile-optimised lightweight scene variant
 - Multiplayer tavern audience mode
+=======
+# sideProject
+3js side project band page
+>>>>>>> 190a52103400cca4402ad32ab3dbfcd376c0c7d5
