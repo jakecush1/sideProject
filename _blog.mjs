@@ -1,0 +1,13 @@
+import puppeteer from "puppeteer-core";
+const b=await puppeteer.launch({executablePath:"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",headless:"new",args:["--autoplay-policy=no-user-gesture-required","--no-sandbox","--use-gl=angle","--use-angle=swiftshader","--enable-webgl","--ignore-gpu-blocklist"]});
+const p=await b.newPage();await p.setViewport({width:1280,height:800});
+p.on("console",m=>{const t=m.text(); if(/bottle/.test(t))console.log(t);});
+p.on("pageerror",e=>console.log("[pageerror]",e.message));
+await p.goto("http://localhost:5173/",{waitUntil:"networkidle2"});
+await new Promise(r=>setTimeout(r,2200));
+await p.evaluate(()=>{const x=[...document.querySelectorAll("button")].find(b=>/enter the tavern/i.test(b.textContent||""));x&&x.click();});
+await new Promise(r=>setTimeout(r,3000));
+await p.evaluate(()=>window.__store.getState().spawnBottles([0,0,2.5]));
+await new Promise(r=>setTimeout(r,4000));
+console.log("--- done waiting ---");
+await b.close();

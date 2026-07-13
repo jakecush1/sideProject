@@ -26,8 +26,8 @@ export default function FooterOverlay() {
       </button>
 
       {/* Content sections live below the fold (canvas is 100vh) */}
-      <div className="pointer-events-auto relative z-20 bg-gradient-to-b from-transparent to-tavern-shadow">
-        <div className="bg-tavern-shadow">
+      <div className="pointer-events-auto relative z-20 bg-gradient-to-b from-transparent to-[#e4d6b4]">
+        <div className="bg-[#e9dfc6]">
           <div className="max-w-4xl mx-auto px-6 py-20 space-y-24">
             {/* ABOUT */}
             <section id="about" className="scroll-mt-24">

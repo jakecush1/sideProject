@@ -24,8 +24,10 @@ export default function Experience() {
       dpr={[1, 1.8]}
       camera={{ position: [0, 2.4, 7.5], fov: 45 }}
       gl={{ antialias: true }}
+      // Unify the render into warm sepia ink tones on paper.
+      style={{ filter: "sepia(0.55) saturate(0.7) contrast(0.98) brightness(1.06)" }}
     >
-      <color attach="background" args={["#1a1009"]} />
+      <color attach="background" args={["#e9dfc6"]} />
       <Suspense fallback={<CanvasLoader />}>
         <Scene />
       </Suspense>

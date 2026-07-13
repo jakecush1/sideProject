@@ -31,9 +31,14 @@ export default function FallingBottle({ id, position, vx, vz, rotSpeed, onDone }
 
   useEffect(() => () => { doneRef.current = true; }, []);
 
-  useFrame((_, dt) => {
+  useFrame((_, rawDt) => {
     if (!ref.current || doneRef.current) return;
     if (settled.current) return;
+
+    // Clamp the timestep: the first frame (or any tab hitch) can report a
+    // multi-second delta, which would otherwise fling the bottle straight
+    // through the floor before it's ever seen.
+    const dt = Math.min(rawDt, 1 / 30);
 
     vy.current += GRAVITY * dt;
     pos.current[0] += vx * dt;
@@ -45,6 +50,7 @@ export default function FallingBottle({ id, position, vx, vz, rotSpeed, onDone }
       vy.current *= -0.28; // bounce
       if (Math.abs(vy.current) < 0.4) {
         settled.current = true;
+        console.log(`[bottle] settled id=${id} at [${pos.current[0].toFixed(2)},${pos.current[1].toFixed(2)},${pos.current[2].toFixed(2)}]`);
         // despawn after lying still for a moment
         setTimeout(() => { if (!doneRef.current) onDone(id); }, 5000);
       }

@@ -42,6 +42,24 @@ export default function App() {
         <Experience />
       </div>
 
+      {/* Aged-paper overlay: bleached worn edges + fine grain, over the canvas */}
+      <div
+        className="fixed inset-0 z-10 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 45%, transparent 48%, rgba(236,226,203,0.5) 82%, rgba(228,216,186,0.85) 100%)",
+        }}
+      />
+      <div
+        className="fixed inset-0 z-10 pointer-events-none"
+        style={{
+          mixBlendMode: "multiply",
+          opacity: 0.5,
+          backgroundImage:
+            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E\")",
+        }}
+      />
+
       {/* Overlays (only after entering) */}
       {started && (
         <>
@@ -56,8 +74,11 @@ export default function App() {
             </div>
           </div>
 
-          {/* Spacer to push content below the 100vh canvas */}
-          <div className="relative">
+          {/* Spacer to push content below the 100vh canvas.
+              pointer-events-none so the transparent 100vh region over the
+              canvas stays click-through; FooterOverlay re-enables events on
+              its own interactive content. */}
+          <div className="relative pointer-events-none">
             <div className="h-screen pointer-events-none" />
             <FooterOverlay />
           </div>

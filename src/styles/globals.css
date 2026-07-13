@@ -1,8 +1,11 @@
-@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital@0;1&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Pinyon+Script&family=EB+Garamond:ital@0;1&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ---- SEPIA / PARCHMENT THEME (inspired by susurrus.vercel.app) ----
+   Aged-paper cream ground, sepia-ink text, elegant literary type. */
 
 html,
 body,
@@ -12,45 +15,54 @@ body,
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: #1a1009;
+  background: #ece2cb; /* aged paper */
 }
 
 body {
   font-family: "EB Garamond", Georgia, serif;
-  color: #f3e6cf;
+  color: #4a3721; /* sepia ink */
   -webkit-font-smoothing: antialiased;
 }
 
+/* Formal literary display face */
 .font-medieval {
-  font-family: "Cinzel", Georgia, serif;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-style: italic;
+  letter-spacing: 0.01em;
 }
 
-/* Parchment panel texture */
+/* Calligraphic script for the wordmark & poetic accents */
+.font-script {
+  font-family: "Pinyon Script", "Cormorant Garamond", cursive;
+  font-style: normal;
+}
+
+/* Parchment panel — light aged paper with a soft sepia edge */
 .parchment {
   background:
-    radial-gradient(ellipse at top left, rgba(201, 162, 75, 0.12), transparent 60%),
-    radial-gradient(ellipse at bottom right, rgba(107, 31, 42, 0.15), transparent 60%),
-    linear-gradient(135deg, #2a1c10, #1f150b);
-  border: 1px solid rgba(201, 162, 75, 0.35);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6), inset 0 0 60px rgba(0, 0, 0, 0.4);
+    radial-gradient(ellipse at top left, rgba(120, 92, 48, 0.06), transparent 60%),
+    radial-gradient(ellipse at bottom right, rgba(90, 60, 30, 0.08), transparent 60%),
+    linear-gradient(135deg, #f3ead2, #e6d8b8);
+  border: 1px solid rgba(90, 66, 38, 0.35);
+  box-shadow: 0 10px 34px rgba(74, 55, 33, 0.22), inset 0 0 44px rgba(120, 92, 48, 0.08);
 }
 
 .gold-text {
-  color: #e7c66a;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  color: #5a4223; /* deep sepia ink for headings */
+  text-shadow: none;
 }
 
-/* Glowing button */
+/* Ink-outline button on paper */
 .btn-tavern {
-  background: linear-gradient(180deg, #7a2531, #581820);
-  border: 1px solid rgba(201, 162, 75, 0.6);
-  color: #f3e6cf;
+  background: linear-gradient(180deg, #f0e6cd, #e2d3b1);
+  border: 1px solid rgba(90, 66, 38, 0.55);
+  color: #4a3721;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 8px rgba(74, 55, 33, 0.18);
 }
 .btn-tavern:hover {
-  background: linear-gradient(180deg, #8f2c3a, #6b1f2a);
-  box-shadow: 0 0 18px rgba(201, 162, 75, 0.5);
+  background: linear-gradient(180deg, #f6eed7, #e9dcbd);
+  box-shadow: 0 3px 14px rgba(74, 55, 33, 0.28);
   transform: translateY(-1px);
 }
 .btn-tavern:active {
@@ -61,27 +73,27 @@ body {
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
-  height: 4px;
+  height: 3px;
   border-radius: 2px;
-  background: rgba(201, 162, 75, 0.3);
+  background: rgba(90, 66, 38, 0.3);
   outline: none;
 }
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  background: #e7c66a;
+  background: #5a4223;
   cursor: pointer;
-  box-shadow: 0 0 6px rgba(231, 198, 106, 0.8);
+  box-shadow: 0 0 0 3px rgba(90, 66, 38, 0.15);
 }
 input[type="range"]::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   border: none;
   border-radius: 50%;
-  background: #e7c66a;
+  background: #5a4223;
   cursor: pointer;
 }
 
@@ -108,7 +120,7 @@ input[type="range"]::-moz-range-thumb {
   width: 6px;
 }
 .tavern-scroll::-webkit-scrollbar-thumb {
-  background: rgba(201, 162, 75, 0.4);
+  background: rgba(90, 66, 38, 0.4);
   border-radius: 3px;
 }
 

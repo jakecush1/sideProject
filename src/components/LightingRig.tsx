@@ -29,14 +29,16 @@ export default function LightingRig() {
       key.current.intensity += (targetIntensity.current - key.current.intensity) * 0.04;
     }
     if (ambient.current) {
-      const ambIntensity = isPlaying ? 0.35 : 0.45;
+      // High-key: keep the scene pale, like a light wash on paper.
+      const ambIntensity = isPlaying ? 1.05 : 1.15;
       ambient.current.intensity += (ambIntensity - ambient.current.intensity) * 0.04;
     }
   });
 
   return (
     <>
-      <ambientLight ref={ambient} intensity={0.45} color="#6b4a2e" />
+      <ambientLight ref={ambient} intensity={1.15} color="#e5d4b0" />
+      <hemisphereLight args={["#f3ead2", "#b8a883", 0.8]} />
       <directionalLight
         ref={key}
         position={[3, 6, 4]}
@@ -52,7 +54,7 @@ export default function LightingRig() {
         shadow-camera-bottom={-8}
       />
       {/* soft fill from front */}
-      <pointLight position={[0, 3, 5]} intensity={0.3} color="#ffb863" distance={12} />
+      <pointLight position={[0, 3, 5]} intensity={0.25} color="#f0dcb0" distance={14} />
     </>
   );
 }

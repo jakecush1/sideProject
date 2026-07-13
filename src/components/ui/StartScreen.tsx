@@ -15,7 +15,7 @@ export default function StartScreen() {
   };
 
   return (
-    <div className="absolute inset-0 z-50 flex items-center justify-center bg-tavern-shadow">
+    <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#ece2cb]">
       {/* atmospheric backdrop */}
       <div
         className="absolute inset-0 opacity-60"

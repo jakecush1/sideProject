@@ -16,7 +16,7 @@ export default function Scene() {
     <>
       <LightingRig />
       <CameraRig />
-      <fog attach="fog" args={["#1a1009", 9, 20]} />
+      <fog attach="fog" args={["#e9dfc6", 8, 22]} />
 
       {/* Invisible floor plane — clicking empty space spawns bottles */}
       <mesh

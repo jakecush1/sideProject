@@ -51,6 +51,7 @@ export default function BottleSpawner() {
     });
 
     audioManager.playSfx("/audio/clink.mp3", 0.3);
+    console.log(`[bottle] spawn count=${count} center=[${cx.toFixed(2)},${cz.toFixed(2)}]`);
 
     setBottles((prev) => {
       const merged = [...prev, ...newBottles];

@@ -4,7 +4,7 @@
 
 export default function LoadingScreen() {
   return (
-    <div className="absolute inset-0 z-[60] flex flex-col items-center justify-center bg-tavern-shadow">
+    <div className="absolute inset-0 z-[60] flex flex-col items-center justify-center bg-[#ece2cb]">
       <h1 className="font-medieval gold-text text-3xl sm:text-4xl font-bold mb-6">
         Side Proj
       </h1>

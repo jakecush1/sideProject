@@ -48,10 +48,11 @@ export default function CameraRig() {
       const m = getBandMember(focusedMemberId);
       if (m) {
         const [x, , z] = m.position;
-        desiredTarget.current.set(x, 0.9, z);
-        // position camera in front of the member, pulled toward center
-        const dir = new Vector3(x, 0, z).normalize();
-        desiredPos.current.set(x + dir.x * 2.2, 1.8, z + dir.z * 2.2 + 1.5);
+        desiredTarget.current.set(x, 0.95, z);
+        // Consistent frontal vantage for EVERY member: sit in front (audience
+        // side, +z) at a fixed height and distance so the back-row two aren't
+        // viewed from above. Slightly less zoomed-in than before.
+        desiredPos.current.set(x * 0.55, 1.7, z + 4.4);
       }
     } else {
       desiredTarget.current.copy(DEFAULT_TARGET);
@@ -78,12 +79,14 @@ export default function CameraRig() {
     parallax.current.y += (py - parallax.current.y) * 0.06;
 
     const goal = desiredPos.current.clone();
-    goal.x += sway + parallax.current.x * PARALLAX_X;
-    goal.y += parallax.current.y * PARALLAX_Y;
+    // Move the camera the same way as the cursor so the scene appears to
+    // follow the mouse (mouse left → scene shifts left).
+    goal.x += sway - parallax.current.x * PARALLAX_X;
+    goal.y -= parallax.current.y * PARALLAX_Y;
     camera.position.lerp(goal, 0.04);
 
     // Nudge the look-at point the opposite way for a gentle depth shift.
-    controls.current.target.x -= parallax.current.x * PARALLAX_X * 0.12;
+    controls.current.target.x += parallax.current.x * PARALLAX_X * 0.12;
 
     controls.current.update();
   });
