@@ -35,10 +35,10 @@ export default function FooterOverlay() {
                 The Band
               </p>
               <h2 className="font-medieval gold-text text-3xl sm:text-4xl font-bold mb-5">
-                The Gilded Minstrels
+                Side Proj
               </h2>
               <p className="text-tavern-candle/80 text-lg leading-relaxed max-w-2xl mb-10">
-                The Gilded Minstrels are a wandering renaissance tavern band specializing
+                Side Proj are a wandering renaissance tavern band specializing
                 in candlelit jigs, suspicious ballads, and songs best performed near a
                 barrel. They have played for kings, peasants, and at least one very
                 confused goat.
@@ -137,7 +137,7 @@ export default function FooterOverlay() {
             </section>
 
             <footer className="text-center text-tavern-stone text-xs pb-8">
-              The Gilded Minstrels · A playful interactive 3D tavern · Built with React
+              Side Proj · A playful interactive 3D tavern · Built with React
               Three Fiber
             </footer>
           </div>

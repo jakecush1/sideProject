@@ -29,7 +29,7 @@ export default function StartScreen() {
           Pull up a stool
         </p>
         <h1 className="font-medieval gold-text text-5xl sm:text-6xl font-bold mb-5 leading-tight">
-          The Gilded Minstrels
+          Side Proj
         </h1>
         <p className="text-tavern-candle/80 text-lg mb-10 italic">
           A strange little medieval band waiting for your command.

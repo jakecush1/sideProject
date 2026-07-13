@@ -32,7 +32,7 @@ export default function Header() {
         {/* Brand */}
         <div className="flex items-center gap-2">
           <span className="font-medieval gold-text text-lg sm:text-xl font-bold">
-            The Gilded Minstrels
+            Side Proj
           </span>
         </div>
 

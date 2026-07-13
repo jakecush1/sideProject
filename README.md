@@ -1,5 +1,5 @@
 <<<<<<< HEAD
-# The Gilded Minstrels
+# Side Proj
 
 An interactive 3D medieval tavern band experience. Four primitive-built musicians sit around a candlelit table — click glowing objects to change songs, click the room to rain beer bottles.
 

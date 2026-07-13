@@ -13,7 +13,11 @@ import { getBandMember } from "../data/bandMembers";
 // is avoided; instead App calls controls through the exported ref hook below.
 
 const DEFAULT_TARGET = new Vector3(0, 0.8, 0);
-const DEFAULT_POS = new Vector3(0, 2.4, 7.5);
+const DEFAULT_POS = new Vector3(0, 2.7, 10.5);
+
+// How far the scene drifts with the mouse (world units).
+const PARALLAX_X = 0.7;
+const PARALLAX_Y = 0.35;
 
 export default function CameraRig() {
   const controls = useRef<OrbitControlsImpl>(null);
@@ -24,6 +28,8 @@ export default function CameraRig() {
 
   const desiredTarget = useRef(DEFAULT_TARGET.clone());
   const desiredPos = useRef(DEFAULT_POS.clone());
+  // Smoothed pointer for mouse parallax (-1..1 on each axis).
+  const parallax = useRef({ x: 0, y: 0 });
 
   // Register reset handler on window so the UI button can call it.
   useEffect(() => {
@@ -64,9 +70,20 @@ export default function CameraRig() {
       reducedMotion || !isPlaying
         ? 0
         : Math.sin(state.clock.elapsedTime * 0.6) * 0.08;
+
+    // Ease the smoothed pointer toward the live pointer for a fluid drift.
+    const px = reducedMotion ? 0 : state.pointer.x;
+    const py = reducedMotion ? 0 : state.pointer.y;
+    parallax.current.x += (px - parallax.current.x) * 0.06;
+    parallax.current.y += (py - parallax.current.y) * 0.06;
+
     const goal = desiredPos.current.clone();
-    goal.x += sway;
+    goal.x += sway + parallax.current.x * PARALLAX_X;
+    goal.y += parallax.current.y * PARALLAX_Y;
     camera.position.lerp(goal, 0.04);
+
+    // Nudge the look-at point the opposite way for a gentle depth shift.
+    controls.current.target.x -= parallax.current.x * PARALLAX_X * 0.12;
 
     controls.current.update();
   });
@@ -75,8 +92,8 @@ export default function CameraRig() {
     <OrbitControls
       ref={controls}
       enablePan={false}
-      minDistance={4}
-      maxDistance={10}
+      minDistance={5}
+      maxDistance={14}
       minPolarAngle={Math.PI * 0.18}
       maxPolarAngle={Math.PI * 0.5}
       minAzimuthAngle={-Math.PI * 0.45}

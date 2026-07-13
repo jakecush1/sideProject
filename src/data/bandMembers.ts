@@ -20,10 +20,10 @@ export type BandMember = {
 export const bandMembers: BandMember[] = [
   {
     id: "aldric",
-    name: "Aldric of the Lute",
+    name: "J Hole",
     instrument: "Lute",
     instrumentType: "lute",
-    bio: "Aldric insists the lute sounds better after three goblets. No one has verified this scientifically, but no one has disproven it either.",
+    bio: "J Hole insists the lute sounds better after three goblets. No one has verified this scientifically, but no one has disproven it either.",
     color: "#6b1f2a", // deep red velvet
     hatColor: "#3d1118",
     position: [-2.2, 0, 0.6],
@@ -31,10 +31,10 @@ export const bandMembers: BandMember[] = [
   },
   {
     id: "mira",
-    name: "Mira Fiddlethorn",
+    name: "Babe Needleman",
     instrument: "Fiddle",
     instrumentType: "fiddle",
-    bio: "Mira can play any tune you hum, then a better version you didn't ask for. She has never once admitted to being wrong about tempo.",
+    bio: "Babe Needleman can play any tune you hum, then a better version you didn't ask for. Never once admitted to being wrong about tempo.",
     color: "#3d6b3c", // moss green
     hatColor: "#24401f",
     position: [-0.8, 0, -1.4],
@@ -42,10 +42,10 @@ export const bandMembers: BandMember[] = [
   },
   {
     id: "bram",
-    name: "Brother Bram Barrelbeat",
+    name: "Admiral Joan",
     instrument: "Hand Drum",
     instrumentType: "drum",
-    bio: "Bram left the monastery over a 'rhythmic disagreement.' He keeps time with his whole body and occasionally with nearby furniture.",
+    bio: "Admiral Joan left the navy over a 'rhythmic disagreement.' She keeps time with her whole body and occasionally with nearby furniture.",
     color: "#7a5a2e", // monk brown
     hatColor: "#4a3417",
     position: [0.8, 0, -1.4],
@@ -53,10 +53,10 @@ export const bandMembers: BandMember[] = [
   },
   {
     id: "elowen",
-    name: "Elowen Silverpipe",
+    name: "Freddie Munter",
     instrument: "Flute",
     instrumentType: "flute",
-    bio: "Elowen claims her flute was carved from a tree that 'remembered every song it ever heard.' She is suspiciously good at proving it.",
+    bio: "Freddie Munter claims his flute was carved from a tree that 'remembered every song it ever heard.' He is suspiciously good at proving it.",
     color: "#2f4a6b", // twilight blue
     hatColor: "#1c2f44",
     position: [2.2, 0, 0.6],

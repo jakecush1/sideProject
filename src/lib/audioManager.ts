@@ -33,7 +33,7 @@ class AudioManager {
         src: [song.file],
         loop: true,
         volume: 0,
-        html5: true, // stream, lighter memory; works with larger files
+        html5: false, // Web Audio: fade()/crossfade works reliably (html5 fades stay stuck at 0)
         onloaderror: () => {
           const t = this.tracks.get(song.id);
           if (t) t.available = false;

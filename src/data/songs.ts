@@ -20,29 +20,29 @@ export type Song = {
 
 export const songs: Song[] = [
   {
-    id: "candlelit-jig",
-    title: "The Candlelit Jig",
-    file: "/audio/candlelit-jig.mp3",
-    mood: "warm",
+    id: "serfs-and-wenches",
+    title: "Serfs and Wenches",
+    file: "/audio/1-serfs.mp3",
+    mood: "rowdy",
     bpm: 132,
     triggerObjectId: "song-scroll",
     description:
-      "A bright, bouncing jig for when the candles are low and the spirits are high. Guaranteed to make at least one person attempt to dance on a table.",
+      "A bright, bouncing anthem for the working folk of the realm. Guaranteed to make at least one person attempt to dance on a table.",
   },
   {
-    id: "broken-goblet",
-    title: "Ballad of the Broken Goblet",
-    file: "/audio/broken-goblet.mp3",
+    id: "feudal-taxation",
+    title: "Feudal Taxation",
+    file: "/audio/2-feudal.mp3",
     mood: "melancholy",
     bpm: 76,
     triggerObjectId: "goblet",
     description:
-      "A mournful ballad mourning a goblet that gave its all. Slow, sweet, and slightly dramatic — much like the goblet's owner.",
+      "A mournful ballad for everyone who owes the lord a portion of the harvest. Slow, sweet, and slightly dramatic.",
   },
   {
-    id: "tavern-moon",
-    title: "Dance of the Tavern Moon",
-    file: "/audio/tavern-moon.mp3",
+    id: "angelic-frick",
+    title: "Angelic Frick",
+    file: "/audio/3-angelic.mp3",
     mood: "mysterious",
     bpm: 104,
     triggerObjectId: "tapestry",
@@ -50,10 +50,10 @@ export const songs: Song[] = [
       "A hypnotic, moonlit tune that makes the shadows lean in to listen. Best enjoyed while pretending you understand its deeper meaning.",
   },
   {
-    id: "drunken-minstrel",
-    title: "The Drunken Minstrel's March",
-    file: "/audio/drunken-minstrel.mp3",
-    mood: "rowdy",
+    id: "yennifer-holepez",
+    title: "Yennifer Holepez",
+    file: "/audio/4-yennifer.mp3",
+    mood: "warm",
     bpm: 118,
     triggerObjectId: "barrel",
     description:
