@@ -71,7 +71,7 @@ export default function ClickableObject({ object }: Props) {
 
       {hovered && (
         <Html position={[0, object.kind === "tapestry" ? 1.6 : 0.5, 0]} center distanceFactor={9}>
-          <div className="pointer-events-none whitespace-nowrap rounded-md border border-tavern-gold/60 bg-tavern-shadow/90 px-2.5 py-1 text-[11px] text-[#f3ead2] font-medieval">
+          <div className="pointer-events-none whitespace-nowrap border-2 border-tavern-gold bg-tavern-shadow/95 px-2.5 py-1 text-[11px] text-tavern-linen font-mono uppercase tracking-wider shadow-brutal-cobalt">
             {object.label}
           </div>
         </Html>

@@ -177,7 +177,7 @@ export default function BandMember({ member, index }: Props) {
       {/* Hover tooltip */}
       {hovered && !isFocused && (
         <Html position={[0, 1.6, 0]} center distanceFactor={8} zIndexRange={[10, 0]}>
-          <div className="pointer-events-none whitespace-nowrap rounded-md border border-tavern-gold/50 bg-tavern-shadow/90 px-2.5 py-1 text-[11px] text-[#f3ead2] font-medieval">
+          <div className="pointer-events-none whitespace-nowrap border-2 border-tavern-gold bg-tavern-shadow/95 px-2.5 py-1 text-[11px] text-tavern-linen font-mono uppercase tracking-wider shadow-brutal-cobalt">
             Meet {member.name}
           </div>
         </Html>
