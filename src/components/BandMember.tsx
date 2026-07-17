@@ -1,7 +1,8 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
-import type { Group, Mesh } from "three";
+import { TextureLoader, SRGBColorSpace } from "three";
+import type { Group, Texture } from "three";
 import type { BandMember as BandMemberData } from "../data/bandMembers";
 import { useGameStore } from "../lib/useGameStore";
 import { getSong } from "../data/songs";
@@ -26,13 +27,48 @@ const MOOD_ENERGY: Record<string, number> = {
   melancholy: 0.3,
 };
 
+// Loads the member's photo as a face texture, center-cropped square (biased
+// toward the top of portrait shots, where faces live). Resolves to null if
+// the file doesn't exist yet, so members render faceless rather than crash.
+function useFaceTexture(url?: string) {
+  const [tex, setTex] = useState<Texture | null>(null);
+  useEffect(() => {
+    if (!url) return;
+    let alive = true;
+    new TextureLoader().load(
+      url,
+      (t) => {
+        if (!alive) return;
+        t.colorSpace = SRGBColorSpace;
+        const img = t.image as HTMLImageElement;
+        const aspect = img.width / img.height;
+        if (aspect < 1) {
+          t.repeat.set(1, aspect);
+          t.offset.set(0, (1 - aspect) * 0.8);
+        } else {
+          t.repeat.set(1 / aspect, 1);
+          t.offset.set((1 - 1 / aspect) / 2, 0);
+        }
+        setTex(t);
+      },
+      undefined,
+      () => {}
+    );
+    return () => {
+      alive = false;
+    };
+  }, [url]);
+  return tex;
+}
+
 export default function BandMember({ member, index }: Props) {
   const group = useRef<Group>(null);
   const leftArm = useRef<Group>(null);
   const rightArm = useRef<Group>(null);
-  const head = useRef<Mesh>(null);
+  const head = useRef<Group>(null);
 
   const [hovered, setHovered] = useState(false);
+  const faceTexture = useFaceTexture(member.photo);
 
   const isPlaying = useGameStore((s) => s.isPlaying);
   const currentSongId = useGameStore((s) => s.currentSongId);
@@ -61,8 +97,8 @@ export default function BandMember({ member, index }: Props) {
       // arms move rhythmically (instrument-appropriate)
       if (leftArm.current && rightArm.current) {
         const armSwing = Math.sin(beat + offset) * (0.4 + energy * 0.5) * motion;
-        if (member.instrumentType === "drum") {
-          // alternating taps
+        if (member.instrumentType === "drum" || member.instrumentType === "organ") {
+          // alternating hands: drum taps / organ keys + chain rattles
           leftArm.current.rotation.x = -0.6 - Math.abs(Math.sin(beat + offset)) * 0.5 * motion;
           rightArm.current.rotation.x = -0.6 - Math.abs(Math.sin(beat + offset + 1.5)) * 0.5 * motion;
         } else if (member.instrumentType === "fiddle") {
@@ -134,11 +170,20 @@ export default function BandMember({ member, index }: Props) {
         />
       </mesh>
 
-      {/* Head */}
-      <mesh ref={head} position={[0, 1.08, 0]} castShadow>
-        <sphereGeometry args={[0.17, 16, 16]} />
-        <meshStandardMaterial color="#e8c9a0" roughness={0.6} />
-      </mesh>
+      {/* Head (group so the face decal bobs with it) */}
+      <group ref={head} position={[0, 1.08, 0]}>
+        <mesh castShadow>
+          <sphereGeometry args={[0.17, 16, 16]} />
+          <meshStandardMaterial color="#e8c9a0" roughness={0.6} />
+        </mesh>
+        {/* Face decal — the member's photo as a round portrait medallion */}
+        {faceTexture && (
+          <mesh position={[0, 0.01, 0.135]}>
+            <circleGeometry args={[0.115, 24]} />
+            <meshStandardMaterial map={faceTexture} roughness={0.85} />
+          </mesh>
+        )}
+      </group>
 
       {/* Hat (cap) */}
       <mesh position={[0, 1.22, 0]} castShadow>

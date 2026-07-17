@@ -1,6 +1,7 @@
-import { useRef, useState } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useEffect, useRef, useState } from "react";
+import { useFrame, useLoader } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
+import { TextureLoader, SRGBColorSpace } from "three";
 import type { Group } from "three";
 import type { ClickableObject as ClickableObjectData } from "../data/clickableObjects";
 import { useGameStore } from "../lib/useGameStore";
@@ -8,6 +9,31 @@ import { useGameStore } from "../lib/useGameStore";
 // CLICKABLE OBJECT
 // Glowing interactive props that trigger songs. Each kind renders different
 // primitive geometry. Hover = scale bounce + glow + tooltip.
+
+// The Angelic Frick trigger: the Cuzco-school angel painting, hung with its
+// own carved frame (photo cropped to trim the wall around it).
+function AngelicPainting({ glow, glowColor }: { glow: boolean; glowColor: string }) {
+  const tex = useLoader(TextureLoader, "/artwork/angelicWall.jpg");
+  useEffect(() => {
+    tex.colorSpace = SRGBColorSpace;
+    tex.repeat.set(0.96, 0.7);
+    tex.offset.set(0.02, 0.15);
+    tex.needsUpdate = true;
+  }, [tex]);
+
+  return (
+    <mesh castShadow>
+      <planeGeometry args={[2.3, 3.0]} />
+      <meshStandardMaterial
+        map={tex}
+        roughness={0.9}
+        side={2}
+        emissive={glowColor}
+        emissiveIntensity={glow ? 0.22 : 0}
+      />
+    </mesh>
+  );
+}
 
 type Props = { object: ClickableObjectData };
 
@@ -163,18 +189,7 @@ function renderKind(
         </group>
       );
     case "tapestry":
-      return (
-        <mesh castShadow>
-          <planeGeometry args={[2.2, 3.0]} />
-          <meshStandardMaterial
-            color="#2f4a6b"
-            roughness={0.9}
-            side={2}
-            emissive={glowColor}
-            emissiveIntensity={glow ? 0.3 : 0.05}
-          />
-        </mesh>
-      );
+      return <AngelicPainting glow={glow} glowColor={glowColor} />;
     case "candle":
       return (
         <mesh castShadow>

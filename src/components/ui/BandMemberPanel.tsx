@@ -2,6 +2,7 @@ import { useGameStore } from "../../lib/useGameStore";
 import { getBandMember } from "../../data/bandMembers";
 import { getSong } from "../../data/songs";
 import { X } from "lucide-react";
+import Portrait from "./Portrait";
 
 // BAND MEMBER PANEL
 // Appears (top-right) when a member is clicked. Shows name, instrument, bio,
@@ -25,10 +26,7 @@ export default function BandMemberPanel() {
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex items-center gap-3">
             {/* Portrait tile — framed like a tiny gallery piece */}
-            <div
-              className="w-11 h-11 border-2 border-tavern-shadow shadow-brutal-blood shrink-0"
-              style={{ background: member.color }}
-            />
+            <Portrait member={member} className="w-14 h-14" />
             <div>
               <h3 className="font-medieval gold-text text-base font-bold leading-tight">
                 {member.name}

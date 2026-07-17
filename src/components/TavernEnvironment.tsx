@@ -1,11 +1,67 @@
-import { useRef } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useEffect, useRef } from "react";
+import { useFrame, useLoader } from "@react-three/fiber";
+import { TextureLoader, SRGBColorSpace } from "three";
 import type { Mesh, PointLight } from "three";
 import { useGameStore } from "../lib/useGameStore";
 
 // TAVERN ENVIRONMENT
 // All static set dressing: floor, walls, table, barrels, fireplace, window,
-// candles, rug, hanging banners. Built from primitives for performance.
+// candles, rug, hanging banners, and framed old-master paintings (real
+// artwork files from /public/artwork) hung like a gallery wall.
+
+function WallPainting({
+  url,
+  position,
+  rotation = [0, 0, 0],
+  width = 1.35,
+  height = 1.8,
+  crop,
+  framed = true,
+}: {
+  url: string;
+  position: [number, number, number];
+  rotation?: [number, number, number];
+  width?: number;
+  height?: number;
+  // UV crop: trim museum wall/label out of a photo. framed=false when the
+  // photo already includes the painting's own frame.
+  crop?: { repeat: [number, number]; offset: [number, number] };
+  framed?: boolean;
+}) {
+  const tex = useLoader(TextureLoader, url);
+  useEffect(() => {
+    tex.colorSpace = SRGBColorSpace;
+    if (crop) {
+      tex.repeat.set(crop.repeat[0], crop.repeat[1]);
+      tex.offset.set(crop.offset[0], crop.offset[1]);
+    }
+    tex.needsUpdate = true;
+  }, [tex, crop]);
+
+  return (
+    <group position={position} rotation={rotation}>
+      {framed && (
+        <>
+          {/* ebony frame */}
+          <mesh castShadow>
+            <boxGeometry args={[width + 0.24, height + 0.24, 0.08]} />
+            <meshStandardMaterial color="#171009" roughness={0.55} />
+          </mesh>
+          {/* brass pinline lip */}
+          <mesh>
+            <boxGeometry args={[width + 0.1, height + 0.1, 0.09]} />
+            <meshStandardMaterial color="#a8781f" metalness={0.55} roughness={0.35} />
+          </mesh>
+        </>
+      )}
+      {/* canvas */}
+      <mesh position={[0, 0, 0.056]} castShadow>
+        <planeGeometry args={[width, height]} />
+        <meshStandardMaterial map={tex} roughness={0.9} />
+      </mesh>
+    </group>
+  );
+}
 
 function Candle({ position }: { position: [number, number, number] }) {
   const flame = useRef<Mesh>(null);
@@ -126,38 +182,6 @@ export default function TavernEnvironment() {
         <meshStandardMaterial color="#433a30" roughness={1} />
       </mesh>
 
-      {/* ARCHED WINDOW with moonlight */}
-      <group position={[-4.5, 3.4, -3.78]}>
-        <mesh>
-          <boxGeometry args={[1.6, 2.2, 0.1]} />
-          <meshStandardMaterial color="#1a2438" />
-        </mesh>
-        {/* moonlight glow */}
-        <mesh position={[0, 0, 0.06]}>
-          <boxGeometry args={[1.4, 2.0, 0.05]} />
-          <meshStandardMaterial
-            color="#acc4ff"
-            emissive="#6c84cf"
-            emissiveIntensity={0.6}
-          />
-        </mesh>
-        {/* cross frame */}
-        <mesh>
-          <boxGeometry args={[0.08, 2.2, 0.14]} />
-          <meshStandardMaterial color="#2a1c10" />
-        </mesh>
-        <mesh>
-          <boxGeometry args={[1.6, 0.08, 0.14]} />
-          <meshStandardMaterial color="#2a1c10" />
-        </mesh>
-      </group>
-      <pointLight
-        position={[-4.5, 3.4, -3.2]}
-        color="#8ca8ff"
-        intensity={0.5}
-        distance={6}
-      />
-
       {/* FIREPLACE (right back corner) */}
       <group position={[4.5, 0, -3.4]}>
         <mesh position={[0, 1.2, 0]} castShadow>
@@ -206,6 +230,40 @@ export default function TavernEnvironment() {
       <Candle position={[0.5, 0.46, 1.9]} />
       <Candle position={[-3.2, 0.0, -3.2]} />
       <Candle position={[2.0, 1.2, -3.4]} />
+
+      {/* GALLERY WALL — framed old masters from /public/artwork */}
+      {/* ter Brugghen lute player, above the fireplace */}
+      <WallPainting
+        url="/artwork/lute-player.jpg"
+        position={[4.5, 3.6, -3.77]}
+        width={1.15}
+        height={1.5}
+      />
+      {/* van Dyck bagpiper, back wall — cropped to its own wooden frame */}
+      <WallPainting
+        url="/artwork/piper.jpg"
+        position={[-3.0, 3.7, -3.77]}
+        width={0.95}
+        height={1.22}
+        crop={{ repeat: [0.735, 0.71], offset: [0.04, 0.255] }}
+        framed={false}
+      />
+      {/* Vermeer at the virginal, left wall */}
+      <WallPainting
+        url="/artwork/vermeer.jpg"
+        position={[-6.77, 3.1, 0.9]}
+        rotation={[0, Math.PI / 2, 0]}
+        width={1.5}
+        height={1.95}
+      />
+      {/* Costa's concert, right wall */}
+      <WallPainting
+        url="/artwork/concert.jpg"
+        position={[6.77, 3.1, 0.9]}
+        rotation={[0, -Math.PI / 2, 0]}
+        width={1.5}
+        height={1.95}
+      />
 
       {/* HANGING BANNERS on back wall */}
       <mesh position={[-1.8, 3.6, -3.78]} castShadow>

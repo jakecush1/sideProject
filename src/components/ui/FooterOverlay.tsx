@@ -2,6 +2,7 @@ import { bandMembers } from "../../data/bandMembers";
 import { songs } from "../../data/songs";
 import { useGameStore } from "../../lib/useGameStore";
 import { ChevronDown } from "lucide-react";
+import Portrait from "./Portrait";
 
 // FOOTER OVERLAY
 // Scrollable content sections that double as the accessible, non-3D fallback:
@@ -58,10 +59,7 @@ export default function FooterOverlay() {
                     key={m.id}
                     className="parchment p-4 flex items-start gap-3"
                   >
-                    <div
-                      className="w-10 h-10 border-2 border-tavern-shadow shadow-brutal-blood shrink-0"
-                      style={{ background: m.color }}
-                    />
+                    <Portrait member={m} className="w-20 h-20" />
                     <div>
                       <h3 className="font-medieval text-tavern-candle text-base font-bold leading-tight">
                         {m.name}
