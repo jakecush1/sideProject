@@ -46,6 +46,48 @@ export default function BandMember({ member, index }: Props) {
   const offset = index * 1.3; // desync members
   const isFocused = focusedMemberId === member.id;
 
+  // Body proportions — "lanky" is ~1.5x the standard height, much skinnier,
+  // long-armed, and hunched forward like a goblin (torsoTilt pitches the
+  // torso, headZ/shoulderZ jut the head and shoulders forward over it).
+  const P =
+    member.build === "lanky"
+      ? {
+          torsoR: 0.14,
+          torsoLen: 0.85,
+          torsoY: 0.88,
+          torsoZ: 0.08,
+          torsoTilt: 0.38,
+          headY: 1.46,
+          headZ: 0.32,
+          featherY: 1.7,
+          shoulderX: 0.15,
+          shoulderY: 1.3,
+          shoulderZ: 0.24,
+          armR: 0.042,
+          armLen: 0.6,
+          armOffY: -0.34,
+          instrY: 0.85,
+          tipY: 2.0,
+        }
+      : {
+          torsoR: 0.24,
+          torsoLen: 0.32,
+          torsoY: 0.62,
+          torsoZ: 0,
+          torsoTilt: 0,
+          headY: 1.08,
+          headZ: 0,
+          featherY: 1.32,
+          shoulderX: 0.22,
+          shoulderY: 0.82,
+          shoulderZ: 0.05,
+          armR: 0.06,
+          armLen: 0.28,
+          armOffY: -0.18,
+          instrY: 0.55,
+          tipY: 1.6,
+        };
+
   useFrame((state) => {
     if (!group.current) return;
     const t = state.clock.elapsedTime;
@@ -124,8 +166,8 @@ export default function BandMember({ member, index }: Props) {
       </mesh>
 
       {/* Body / torso */}
-      <mesh position={[0, 0.62, 0]} castShadow>
-        <capsuleGeometry args={[0.24, 0.32, 6, 12]} />
+      <mesh position={[0, P.torsoY, P.torsoZ]} rotation={[P.torsoTilt, 0, 0]} castShadow>
+        <capsuleGeometry args={[P.torsoR, P.torsoLen, 6, 12]} />
         <meshStandardMaterial
           color={member.color}
           roughness={0.7}
@@ -134,11 +176,20 @@ export default function BandMember({ member, index }: Props) {
         />
       </mesh>
 
-      {/* Head */}
-      <group ref={head} position={[0, 1.08, 0]}>
+      {/* Head (hat rides inside so it follows the goblin jut) */}
+      <group ref={head} position={[0, P.headY, P.headZ]}>
         <mesh castShadow>
           <sphereGeometry args={[0.17, 24, 24]} />
-          <meshStandardMaterial color="#e8c9a0" roughness={0.6} />
+          <meshStandardMaterial color="#e8b48c" roughness={0.6} />
+        </mesh>
+        {/* Hat (cap) + feather — children of the head so they bob and jut with it */}
+        <mesh position={[0, 0.14, 0]} castShadow>
+          <coneGeometry args={[0.2, 0.22, 12]} />
+          <meshStandardMaterial color={member.hatColor} roughness={0.7} />
+        </mesh>
+        <mesh position={[0.12, 0.24, 0]} rotation={[0, 0, -0.6]}>
+          <coneGeometry args={[0.02, 0.22, 6]} />
+          <meshStandardMaterial color="#c9a24b" />
         </mesh>
         {/* Long hair hanging from under the hat, down past the shoulders */}
         {member.hairColor && (
@@ -169,27 +220,16 @@ export default function BandMember({ member, index }: Props) {
         )}
       </group>
 
-      {/* Hat (cap) */}
-      <mesh position={[0, 1.22, 0]} castShadow>
-        <coneGeometry args={[0.2, 0.22, 12]} />
-        <meshStandardMaterial color={member.hatColor} roughness={0.7} />
-      </mesh>
-      {/* hat feather */}
-      <mesh position={[0.12, 1.32, 0]} rotation={[0, 0, -0.6]}>
-        <coneGeometry args={[0.02, 0.22, 6]} />
-        <meshStandardMaterial color="#c9a24b" />
-      </mesh>
-
       {/* Arms (pivot at shoulder) */}
-      <group ref={leftArm} position={[-0.22, 0.82, 0.05]}>
-        <mesh position={[0, -0.18, 0.05]} castShadow>
-          <capsuleGeometry args={[0.06, 0.28, 4, 8]} />
+      <group ref={leftArm} position={[-P.shoulderX, P.shoulderY, P.shoulderZ]}>
+        <mesh position={[0, P.armOffY, 0.05]} castShadow>
+          <capsuleGeometry args={[P.armR, P.armLen, 4, 8]} />
           <meshStandardMaterial color={member.color} roughness={0.7} />
         </mesh>
       </group>
-      <group ref={rightArm} position={[0.22, 0.82, 0.05]}>
-        <mesh position={[0, -0.18, 0.05]} castShadow>
-          <capsuleGeometry args={[0.06, 0.28, 4, 8]} />
+      <group ref={rightArm} position={[P.shoulderX, P.shoulderY, P.shoulderZ]}>
+        <mesh position={[0, P.armOffY, 0.05]} castShadow>
+          <capsuleGeometry args={[P.armR, P.armLen, 4, 8]} />
           <meshStandardMaterial color={member.color} roughness={0.7} />
         </mesh>
       </group>
@@ -198,7 +238,7 @@ export default function BandMember({ member, index }: Props) {
           player — swallow its pointer events so only Joan himself is
           clickable, not the whole console. */}
       <group
-        position={[0, 0.55, 0.2]}
+        position={[0, P.instrY, 0.2]}
         {...(member.instrumentType === "organ"
           ? {
               onClick: (e: { stopPropagation: () => void }) => e.stopPropagation(),
@@ -215,7 +255,7 @@ export default function BandMember({ member, index }: Props) {
 
       {/* Hover tooltip */}
       {hovered && !isFocused && (
-        <Html position={[0, 1.6, 0]} center distanceFactor={8} zIndexRange={[10, 0]}>
+        <Html position={[0, P.tipY, 0]} center distanceFactor={8} zIndexRange={[10, 0]}>
           <div className="pointer-events-none whitespace-nowrap border-2 border-tavern-gold bg-tavern-shadow/95 px-2.5 py-1 text-[11px] text-tavern-linen font-mono uppercase tracking-wider shadow-brutal-cobalt">
             Meet {member.name}
           </div>

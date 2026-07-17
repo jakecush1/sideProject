@@ -4,7 +4,12 @@
 // - Babe Needleman (at [-0.8, 0, -1.4]): banjo + accordion
 
 export default function SpareInstruments() {
-  return <BabeGear />;
+  return (
+    <>
+      <BabeGear />
+      <BabeAccordion />
+    </>
+  );
 }
 
 function BabeGear() {
@@ -44,8 +49,16 @@ function BabeGear() {
         </mesh>
       </group>
 
-      {/* ACCORDION — sitting closed-ish on the floor, slight tilt */}
-      <group position={[0.52, 0.14, 0.3]} rotation={[0, -0.5, 0.05]}>
+    </group>
+  );
+}
+
+// On the floor in FRONT of Babe (he sits at [-0.8, 0, -1.4] facing the
+// circle center), keyboard side angled toward him.
+function BabeAccordion() {
+  return (
+    <group position={[-1.2, 0, -0.65]} rotation={[0, 0.4, 0]}>
+      <group position={[0, 0.14, 0]} rotation={[0, 0, 0.05]}>
         {/* left end (bass side) */}
         <mesh position={[-0.17, 0, 0]} castShadow>
           <boxGeometry args={[0.09, 0.27, 0.18]} />

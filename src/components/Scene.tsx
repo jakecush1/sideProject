@@ -5,6 +5,8 @@ import TavernEnvironment from "./TavernEnvironment";
 import BandCircle from "./BandCircle";
 import SpareInstruments from "./SpareInstruments";
 import Horse from "./Horse";
+import Bar from "./Bar";
+import Barmaid from "./Barmaid";
 import ClickableObject from "./ClickableObject";
 import BottleSpawner from "./BottleSpawner";
 import LightingRig from "./LightingRig";
@@ -18,7 +20,9 @@ export default function Scene() {
     <>
       <LightingRig />
       <CameraRig />
-      <fog attach="fog" args={["#1c130b", 8, 22]} />
+      {/* smoky haze: warm fog, close enough to soften the far corners
+          without milking out the band */}
+      <fog attach="fog" args={["#241708", 7.5, 21]} />
 
       {/* Invisible floor plane — clicking empty space spawns bottles */}
       <mesh
@@ -37,6 +41,8 @@ export default function Scene() {
       <BandCircle />
       <SpareInstruments />
       <Horse />
+      <Bar />
+      <Barmaid />
 
       {clickableObjects.map((obj) => (
         <ClickableObject key={obj.id} object={obj} />

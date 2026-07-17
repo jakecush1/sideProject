@@ -37,13 +37,17 @@ function renderInstrument(type: InstrumentType) {
     case "lute":
       return (
         <group rotation={[0.3, 0, -0.4]} position={[0.15, 0.05, 0.25]}>
-          {/* body */}
+          {/* body — dark bowl back, pale spruce soundboard (like the refs) */}
           <mesh castShadow>
             <sphereGeometry args={[0.18, 16, 12]} />
-            <meshStandardMaterial color="#7a4a1e" roughness={0.6} />
+            <meshStandardMaterial color="#6e4018" roughness={0.55} />
+          </mesh>
+          <mesh position={[0, 0.02, 0.165]}>
+            <circleGeometry args={[0.135, 16]} />
+            <meshStandardMaterial color="#d9c29a" roughness={0.7} />
           </mesh>
           {/* soundhole */}
-          <mesh position={[0, 0, 0.17]}>
+          <mesh position={[0, 0.02, 0.172]}>
             <circleGeometry args={[0.05, 16]} />
             <meshStandardMaterial color="#1a0e05" />
           </mesh>
@@ -195,10 +199,10 @@ function renderInstrument(type: InstrumentType) {
               <meshStandardMaterial color="#8a8578" metalness={0.8} roughness={0.4} />
             </mesh>
           ))}
-          {/* spare flute resting on the console top */}
+          {/* spare flute resting on the console top — carved wood, per refs */}
           <mesh position={[0.38, 1.04, -0.1]} rotation={[0, 0.5, Math.PI / 2]} castShadow>
             <cylinderGeometry args={[0.025, 0.03, 0.6, 12]} />
-            <meshStandardMaterial color="#c8a24b" roughness={0.4} metalness={0.3} />
+            <meshStandardMaterial color="#7a4a26" roughness={0.6} />
           </mesh>
         </group>
       );

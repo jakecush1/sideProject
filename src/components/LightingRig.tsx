@@ -37,7 +37,7 @@ export default function LightingRig() {
 
   return (
     <>
-      <ambientLight ref={ambient} intensity={1.15} color="#e5d4b0" />
+      <ambientLight ref={ambient} intensity={1.35} color="#eddbb2" />
       <hemisphereLight args={["#f3ead2", "#b8a883", 0.8]} />
       <directionalLight
         ref={key}

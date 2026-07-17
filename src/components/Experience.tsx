@@ -24,10 +24,10 @@ export default function Experience() {
       dpr={[1, 1.8]}
       camera={{ position: [0, 2.4, 7.5], fov: 45 }}
       gl={{ antialias: true }}
-      // Old-master varnish: warm cast, deeper contrast, slightly crushed blacks.
-      style={{ filter: "sepia(0.3) saturate(0.85) contrast(1.08) brightness(0.96)" }}
+      // Old-master varnish: warm cast, gentler contrast, brighter timber.
+      style={{ filter: "sepia(0.28) saturate(0.9) contrast(1.06) brightness(1.02)" }}
     >
-      <color attach="background" args={["#1c130b"]} />
+      <color attach="background" args={["#241708"]} />
       <Suspense fallback={<CanvasLoader />}>
         <Scene />
       </Suspense>
