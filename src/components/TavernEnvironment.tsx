@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useFrame, useLoader } from "@react-three/fiber";
 import { TextureLoader, SRGBColorSpace, CanvasTexture } from "three";
-import type { Group, Mesh, PointLight, Sprite, SpriteMaterial } from "three";
+import type { Group, Mesh, MeshBasicMaterial, PointLight, Sprite, SpriteMaterial } from "three";
 import { useGameStore } from "../lib/useGameStore";
 
 // TAVERN ENVIRONMENT
@@ -104,6 +104,89 @@ function Candle({ position }: { position: [number, number, number] }) {
         distance={3.5}
         decay={2}
       />
+    </group>
+  );
+}
+
+// A properly burning hearth fire: crossed logs, layered flame tongues that
+// flicker and sway independently, and glowing sparks rising up the flue.
+const HEARTH_FLAMES = [
+  { pos: [0, 0.12, 0.35], r: 0.3, h: 1.0, color: "#ff8a1c", speed: 10, phase: 0 },
+  { pos: [-0.18, 0.12, 0.4], r: 0.16, h: 0.66, color: "#ffb347", speed: 13, phase: 2.1 },
+  { pos: [0.2, 0.12, 0.42], r: 0.13, h: 0.56, color: "#ffce6b", speed: 15, phase: 4.2 },
+  { pos: [-0.05, 0.12, 0.44], r: 0.09, h: 0.42, color: "#ffe49a", speed: 18, phase: 1.3 },
+  { pos: [0.09, 0.12, 0.38], r: 0.1, h: 0.5, color: "#ff6a10", speed: 12, phase: 3.4 },
+] as const;
+
+const HEARTH_SPARKS = Array.from({ length: 7 }, (_, i) => ({
+  x: -0.2 + (i % 4) * 0.13,
+  z: 0.34 + (i % 3) * 0.04,
+  speed: 0.5 + (i % 3) * 0.22,
+  phase: i * 0.71,
+}));
+
+function HearthFire() {
+  const flames = useRef<(Mesh | null)[]>([]);
+  const sparks = useRef<(Mesh | null)[]>([]);
+  const reducedMotion = useGameStore((s) => s.reducedMotion);
+
+  useFrame((state) => {
+    if (reducedMotion) return;
+    const t = state.clock.elapsedTime;
+    flames.current.forEach((m, i) => {
+      if (!m) return;
+      const f = HEARTH_FLAMES[i];
+      // each tongue breathes at its own rate, base anchored to the logs
+      const flicker =
+        0.85 + Math.sin(t * f.speed + f.phase) * 0.18 + Math.sin(t * (f.speed * 0.37) + f.phase) * 0.1;
+      m.scale.y = flicker;
+      m.scale.x = m.scale.z = 0.9 + Math.sin(t * (f.speed * 0.7) + f.phase) * 0.12;
+      m.position.y = f.pos[1] + (f.h / 2) * flicker;
+      m.rotation.z = Math.sin(t * 2.2 + f.phase) * 0.1;
+    });
+    sparks.current.forEach((m, i) => {
+      if (!m) return;
+      const s = HEARTH_SPARKS[i];
+      const cycle = (t * s.speed + s.phase) % 1;
+      m.position.set(
+        s.x + Math.sin((t + s.phase) * 3 + cycle * 6) * 0.06,
+        0.25 + cycle * 1.1,
+        s.z
+      );
+      m.scale.setScalar(1 - cycle * 0.7);
+      (m.material as MeshBasicMaterial).opacity = 1 - cycle;
+    });
+  });
+
+  return (
+    <group>
+      {/* crossed logs on a bed of embers */}
+      <mesh position={[0, 0.14, 0.4]} rotation={[0, 0.5, 0.06]} castShadow>
+        <cylinderGeometry args={[0.07, 0.08, 0.85, 8]} />
+        <meshStandardMaterial color="#2e1a0c" roughness={1} />
+      </mesh>
+      <mesh position={[0, 0.16, 0.42]} rotation={[0, -0.6, -0.05]} castShadow>
+        <cylinderGeometry args={[0.06, 0.07, 0.8, 8]} />
+        <meshStandardMaterial color="#3a220e" roughness={1} />
+      </mesh>
+      {/* flame tongues */}
+      {HEARTH_FLAMES.map((f, i) => (
+        <mesh
+          key={i}
+          ref={(m) => (flames.current[i] = m)}
+          position={[f.pos[0], f.pos[1] + f.h / 2, f.pos[2]]}
+        >
+          <coneGeometry args={[f.r, f.h, 8]} />
+          <meshBasicMaterial color={f.color} />
+        </mesh>
+      ))}
+      {/* rising sparks */}
+      {HEARTH_SPARKS.map((s, i) => (
+        <mesh key={i} ref={(m) => (sparks.current[i] = m)} position={[s.x, 0.25, s.z]}>
+          <sphereGeometry args={[0.022, 6, 6]} />
+          <meshBasicMaterial color="#ffb347" transparent />
+        </mesh>
+      ))}
     </group>
   );
 }
@@ -319,19 +402,8 @@ export default function TavernEnvironment() {
           <circleGeometry args={[0.65, 20, 0, Math.PI]} />
           <meshStandardMaterial color="#0a0603" />
         </mesh>
-        {/* tall flames */}
-        <mesh position={[0, 0.55, 0.35]}>
-          <coneGeometry args={[0.3, 1.0, 8]} />
-          <meshBasicMaterial color="#ff8a1c" />
-        </mesh>
-        <mesh position={[-0.18, 0.45, 0.4]}>
-          <coneGeometry args={[0.16, 0.6, 7]} />
-          <meshBasicMaterial color="#ffb347" />
-        </mesh>
-        <mesh position={[0.2, 0.42, 0.42]}>
-          <coneGeometry args={[0.13, 0.5, 7]} />
-          <meshBasicMaterial color="#ffce6b" />
-        </mesh>
+        {/* burning fire */}
+        <HearthFire />
         {/* embers glow */}
         <mesh position={[0, 0.12, 0.45]}>
           <sphereGeometry args={[0.3, 10, 8]} />

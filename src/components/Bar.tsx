@@ -257,50 +257,84 @@ function Drunkard({
 
 function Barkeep() {
   const ref = useRef<Group>(null);
+  const bellyRef = useRef<Group>(null);
   const reducedMotion = useGameStore((s) => s.reducedMotion);
   useFrame((state) => {
     if (!ref.current || reducedMotion) return;
     const t = state.clock.elapsedTime;
-    ref.current.position.y = Math.sin(t * 1.3) * 0.015;
+    // jolly belly-laugh: quick bounce, a chuckle sway, belly jiggling along
+    const chuckle = Math.pow(Math.max(0, Math.sin(t * 0.35)), 2);
+    ref.current.position.y = Math.sin(t * 1.3) * 0.015 + chuckle * Math.abs(Math.sin(t * 7)) * 0.03;
     ref.current.rotation.y = Math.sin(t * 0.4) * 0.08;
+    ref.current.rotation.z = chuckle * Math.sin(t * 7) * 0.03;
+    if (bellyRef.current) {
+      bellyRef.current.scale.setScalar(1 + chuckle * Math.abs(Math.sin(t * 7)) * 0.05);
+    }
   });
   return (
     <group position={[6.35, 0, -0.2]} rotation={[0, -Math.PI / 2, 0]}>
       <group ref={ref}>
         {/* legs / long tunic */}
         <mesh position={[0, 0.4, 0]} castShadow>
-          <cylinderGeometry args={[0.19, 0.24, 0.8, 10]} />
+          <cylinderGeometry args={[0.26, 0.32, 0.8, 10]} />
           <meshStandardMaterial color="#3d2f22" roughness={0.85} />
         </mesh>
         {/* torso */}
         <mesh position={[0, 1.0, 0]} castShadow>
-          <capsuleGeometry args={[0.24, 0.34, 6, 10]} />
+          <capsuleGeometry args={[0.32, 0.3, 6, 10]} />
           <meshStandardMaterial color="#5a4a33" roughness={0.8} />
         </mesh>
-        {/* apron */}
-        <mesh position={[0, 0.88, 0.22]} rotation={[0.06, 0, 0]}>
-          <boxGeometry args={[0.34, 0.62, 0.04]} />
+        {/* the belly — a point of pride, jiggles when he laughs */}
+        <group ref={bellyRef} position={[0, 0.88, 0.14]}>
+          <mesh castShadow>
+            <sphereGeometry args={[0.3, 14, 12]} />
+            <meshStandardMaterial color="#5a4a33" roughness={0.8} />
+          </mesh>
+        </group>
+        {/* apron stretched over the belly */}
+        <mesh position={[0, 0.85, 0.38]} rotation={[0.28, 0, 0]}>
+          <boxGeometry args={[0.44, 0.6, 0.04]} />
           <meshStandardMaterial color="#cfc0a0" roughness={0.9} />
         </mesh>
-        {/* head — bald, mustachioed, seen it all */}
+        {/* head — bald, rosy, mid-chuckle */}
         <mesh position={[0, 1.52, 0]} castShadow>
-          <sphereGeometry args={[0.16, 16, 16]} />
+          <sphereGeometry args={[0.17, 16, 16]} />
           <meshStandardMaterial color={SKIN} roughness={0.6} />
         </mesh>
-        <mesh position={[0, 1.47, 0.145]}>
-          <boxGeometry args={[0.09, 0.025, 0.03]} />
+        {/* rosy cheeks + jolly red nose */}
+        {[-0.09, 0.09].map((x) => (
+          <mesh key={x} position={[x, 1.5, 0.135]}>
+            <sphereGeometry args={[0.038, 8, 8]} />
+            <meshStandardMaterial color="#d98a70" roughness={0.6} />
+          </mesh>
+        ))}
+        <mesh position={[0, 1.53, 0.16]}>
+          <sphereGeometry args={[0.04, 8, 8]} />
+          <meshStandardMaterial color="#c86a54" roughness={0.6} />
+        </mesh>
+        {/* mustache flowing into a big full beard */}
+        <mesh position={[0, 1.47, 0.15]}>
+          <boxGeometry args={[0.14, 0.03, 0.04]} />
           <meshStandardMaterial color="#6b4a2a" roughness={0.9} />
         </mesh>
+        <mesh position={[0, 1.36, 0.1]} scale={[1, 1.5, 0.8]} castShadow>
+          <sphereGeometry args={[0.13, 12, 10]} />
+          <meshStandardMaterial color="#6b4a2a" roughness={0.95} />
+        </mesh>
+        <mesh position={[0, 1.22, 0.08]} scale={[0.7, 1.2, 0.6]}>
+          <sphereGeometry args={[0.1, 10, 8]} />
+          <meshStandardMaterial color="#6b4a2a" roughness={0.95} />
+        </mesh>
         {/* arms resting toward the counter, rag in hand */}
-        <mesh position={[0.24, 1.05, 0.12]} rotation={[0.7, 0, -0.5]} castShadow>
-          <capsuleGeometry args={[0.055, 0.3, 4, 8]} />
+        <mesh position={[0.3, 1.05, 0.16]} rotation={[0.7, 0, -0.6]} castShadow>
+          <capsuleGeometry args={[0.06, 0.3, 4, 8]} />
           <meshStandardMaterial color="#5a4a33" roughness={0.8} />
         </mesh>
-        <mesh position={[-0.24, 1.05, 0.12]} rotation={[0.7, 0, 0.5]} castShadow>
-          <capsuleGeometry args={[0.055, 0.3, 4, 8]} />
+        <mesh position={[-0.3, 1.05, 0.16]} rotation={[0.7, 0, 0.6]} castShadow>
+          <capsuleGeometry args={[0.06, 0.3, 4, 8]} />
           <meshStandardMaterial color="#5a4a33" roughness={0.8} />
         </mesh>
-        <mesh position={[-0.18, 0.95, 0.3]}>
+        <mesh position={[-0.22, 0.95, 0.36]}>
           <boxGeometry args={[0.12, 0.1, 0.02]} />
           <meshStandardMaterial color="#d8d2c0" roughness={0.95} />
         </mesh>
