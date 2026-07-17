@@ -446,6 +446,16 @@ export default function TavernEnvironment() {
       <Candle position={[2.0, 1.2, -3.4]} />
 
       {/* GALLERY WALL — framed old masters from /public/artwork */}
+      {/* Cuzco-school angel, centre of the back wall (was the Angelic Frick
+          trigger; the barmaid handles that now). Cropped to its own frame. */}
+      <WallPainting
+        url="/artwork/angelicWall.jpg"
+        position={[0, 2.6, -3.4]}
+        width={2.3}
+        height={3.0}
+        crop={{ repeat: [0.87, 0.7], offset: [0.065, 0.13] }}
+        framed={false}
+      />
       {/* ter Brugghen lute player, back wall left of the piper */}
       <WallPainting
         url="/artwork/lute-player.jpg"

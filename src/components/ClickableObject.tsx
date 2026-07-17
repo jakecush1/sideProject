@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import { useFrame, useLoader } from "@react-three/fiber";
+import { useRef, useState } from "react";
+import { useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
-import { TextureLoader, SRGBColorSpace } from "three";
 import type { Group } from "three";
 import type { ClickableObject as ClickableObjectData } from "../data/clickableObjects";
 import { useGameStore } from "../lib/useGameStore";
@@ -9,31 +8,6 @@ import { useGameStore } from "../lib/useGameStore";
 // CLICKABLE OBJECT
 // Glowing interactive props that trigger songs. Each kind renders different
 // primitive geometry. Hover = scale bounce + glow + tooltip.
-
-// The Angelic Frick trigger: the Cuzco-school angel painting, hung with its
-// own carved frame (photo cropped to trim the wall around it).
-function AngelicPainting({ glow, glowColor }: { glow: boolean; glowColor: string }) {
-  const tex = useLoader(TextureLoader, "/artwork/angelicWall.jpg");
-  useEffect(() => {
-    tex.colorSpace = SRGBColorSpace;
-    tex.repeat.set(0.87, 0.7);
-    tex.offset.set(0.065, 0.13);
-    tex.needsUpdate = true;
-  }, [tex]);
-
-  return (
-    <mesh castShadow>
-      <planeGeometry args={[2.3, 3.0]} />
-      <meshStandardMaterial
-        map={tex}
-        roughness={0.9}
-        side={2}
-        emissive={glowColor}
-        emissiveIntensity={glow ? 0.22 : 0}
-      />
-    </mesh>
-  );
-}
 
 type Props = { object: ClickableObjectData };
 
@@ -56,13 +30,8 @@ export default function ClickableObject({ object }: Props) {
     const next = cur + (targetScale - cur) * 0.15;
     group.current.scale.setScalar(next * base);
 
-    // gentle float for glowing trigger props (not wall/furniture/ground pieces)
-    if (
-      object.kind !== "tapestry" &&
-      object.kind !== "keg" &&
-      object.kind !== "bread" &&
-      !reducedMotion
-    ) {
+    // gentle float for glowing trigger props (not furniture/ground pieces)
+    if (object.kind !== "keg" && object.kind !== "bread" && !reducedMotion) {
       group.current.position.y =
         object.position[1] + Math.sin(t * 2 + object.position[0]) * 0.03;
     }
@@ -96,13 +65,11 @@ export default function ClickableObject({ object }: Props) {
       {renderKind(object, glow, glowColor)}
 
       {/* glow halo */}
-      {glow && object.kind !== "tapestry" && (
-        <pointLight color={glowColor} intensity={1.2} distance={1.6} />
-      )}
+      {glow && <pointLight color={glowColor} intensity={1.2} distance={1.6} />}
 
       {hovered && (
         <Html
-          position={[0, object.kind === "tapestry" ? 1.6 : object.kind === "keg" ? 1.55 : 0.5, 0]}
+          position={[0, object.kind === "keg" ? 1.55 : 0.5, 0]}
           center
           distanceFactor={9}
         >
@@ -197,8 +164,6 @@ function renderKind(
           </mesh>
         </group>
       );
-    case "tapestry":
-      return <AngelicPainting glow={glow} glowColor={glowColor} />;
     case "keg":
       // Giant old-style mead keg on a rustic side table (origin at floor)
       return (

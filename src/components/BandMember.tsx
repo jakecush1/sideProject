@@ -182,6 +182,47 @@ export default function BandMember({ member, index }: Props) {
           <sphereGeometry args={[0.17, 24, 24]} />
           <meshStandardMaterial color="#e8b48c" roughness={0.6} />
         </mesh>
+        {/* eyeballs — mostly hidden behind the shades, but they're in there */}
+        {[-0.06, 0.06].map((x) => (
+          <group key={x} position={[x, 0.03, 0.13]}>
+            <mesh>
+              <sphereGeometry args={[0.026, 10, 10]} />
+              <meshStandardMaterial color="#f5f2ea" roughness={0.3} />
+            </mesh>
+            <mesh position={[0, 0, 0.018]}>
+              <sphereGeometry args={[0.012, 8, 8]} />
+              <meshStandardMaterial color="#2a1c10" roughness={0.3} />
+            </mesh>
+          </group>
+        ))}
+        {/* wayfarer-style shades: chunky dark lenses, browline bar, temple
+            arms hooking back over the ears — very un-medieval, very cool */}
+        <group position={[0, 0.035, 0]}>
+          {[-0.063, 0.063].map((x) => (
+            <mesh key={x} position={[x, 0, 0.165]} castShadow>
+              <boxGeometry args={[0.095, 0.07, 0.03]} />
+              <meshStandardMaterial color="#101010" roughness={0.15} metalness={0.3} />
+            </mesh>
+          ))}
+          <mesh position={[0, 0.04, 0.163]}>
+            <boxGeometry args={[0.225, 0.022, 0.034]} />
+            <meshStandardMaterial color="#0a0a0a" roughness={0.4} />
+          </mesh>
+          <mesh position={[0, 0.012, 0.168]}>
+            <boxGeometry args={[0.04, 0.014, 0.02]} />
+            <meshStandardMaterial color="#0a0a0a" roughness={0.4} />
+          </mesh>
+          {[-1, 1].map((side) => (
+            <mesh
+              key={side}
+              position={[side * 0.135, 0.035, 0.075]}
+              rotation={[0, side * -0.34, 0]}
+            >
+              <boxGeometry args={[0.014, 0.018, 0.19]} />
+              <meshStandardMaterial color="#0a0a0a" roughness={0.4} />
+            </mesh>
+          ))}
+        </group>
         {/* Hat (cap) + feather — children of the head so they bob and jut with it */}
         <mesh position={[0, 0.14, 0]} castShadow>
           <coneGeometry args={[0.2, 0.22, 12]} />

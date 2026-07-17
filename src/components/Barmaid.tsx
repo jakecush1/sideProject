@@ -1,17 +1,28 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
+import { Html } from "@react-three/drei";
 import type { Group } from "three";
 import { useGameStore } from "../lib/useGameStore";
 
 // BARMAID
 // A buxom blonde tavern wench doing endless laps of the room with a
 // pitcher of beer, dodging the band, the horse, and the keg. Primitive-built
-// and fully cartoon, like everyone else in here.
+// and fully cartoon, like everyone else in here. She is also the walking
+// trigger for "Angelic Frick" — click her to play it.
+
+const SONG_ID = "angelic-frick";
 
 export default function Barmaid() {
   const walker = useRef<Group>(null);
   const body = useRef<Group>(null);
+  const [hovered, setHovered] = useState(false);
   const reducedMotion = useGameStore((s) => s.reducedMotion);
+  const selectSong = useGameStore((s) => s.selectSong);
+  const currentSongId = useGameStore((s) => s.currentSongId);
+
+  const isActive = currentSongId === SONG_ID;
+  const glow = hovered || isActive;
+  const glowColor = isActive ? "#ffd97a" : "#e7c66a";
 
   useFrame((state) => {
     if (!walker.current) return;
@@ -28,15 +39,41 @@ export default function Barmaid() {
       body.current.position.y = Math.abs(Math.sin(raw * 6)) * 0.045;
       body.current.rotation.z = Math.sin(raw * 6) * 0.045;
     }
+    // hover bounce, same feel as the other clickable props
+    if (body.current) {
+      const target = hovered ? 1.12 : 1;
+      const next = body.current.scale.x + (target - body.current.scale.x) * 0.15;
+      body.current.scale.setScalar(next);
+    }
   });
 
   return (
-    <group ref={walker}>
+    <group
+      ref={walker}
+      onClick={(e) => {
+        e.stopPropagation();
+        selectSong(SONG_ID);
+      }}
+      onPointerOver={(e) => {
+        e.stopPropagation();
+        setHovered(true);
+        document.body.style.cursor = "pointer";
+      }}
+      onPointerOut={() => {
+        setHovered(false);
+        document.body.style.cursor = "auto";
+      }}
+    >
       <group ref={body}>
         {/* skirt to the floor (nobody has to animate legs) */}
         <mesh position={[0, 0.45, 0]} castShadow>
           <cylinderGeometry args={[0.14, 0.42, 0.9, 12]} />
-          <meshStandardMaterial color="#7e2f28" roughness={0.85} />
+          <meshStandardMaterial
+            color="#7e2f28"
+            roughness={0.85}
+            emissive={glowColor}
+            emissiveIntensity={glow ? 0.3 : 0}
+          />
         </mesh>
         {/* apron */}
         <mesh position={[0, 0.42, 0.27]} rotation={[0.18, 0, 0]}>
@@ -46,7 +83,12 @@ export default function Barmaid() {
         {/* bodice */}
         <mesh position={[0, 1.0, 0]} castShadow>
           <capsuleGeometry args={[0.165, 0.22, 6, 10]} />
-          <meshStandardMaterial color="#3f4a33" roughness={0.8} />
+          <meshStandardMaterial
+            color="#3f4a33"
+            roughness={0.8}
+            emissive={glowColor}
+            emissiveIntensity={glow ? 0.3 : 0}
+          />
         </mesh>
         {/* chemise bustline */}
         {[-0.08, 0.08].map((x, i) => (
@@ -96,6 +138,19 @@ export default function Barmaid() {
             <sphereGeometry args={[0.15, 16, 16]} />
             <meshStandardMaterial color="#e8b48c" roughness={0.6} />
           </mesh>
+          {/* eyes */}
+          {[-0.055, 0.055].map((x, i) => (
+            <group key={i} position={[x, 0.03, 0.125]}>
+              <mesh>
+                <sphereGeometry args={[0.03, 10, 10]} />
+                <meshStandardMaterial color="#f5f2ea" roughness={0.3} />
+              </mesh>
+              <mesh position={[0, 0, 0.022]}>
+                <sphereGeometry args={[0.014, 8, 8]} />
+                <meshStandardMaterial color="#2a1c10" roughness={0.3} />
+              </mesh>
+            </group>
+          ))}
           {/* rosy cheeks */}
           {[-0.08, 0.08].map((x, i) => (
             <mesh key={i} position={[x, -0.02, 0.115]}>
@@ -125,7 +180,20 @@ export default function Barmaid() {
             </group>
           ))}
         </group>
+
+        {/* glow halo, matching the other song triggers */}
+        {glow && (
+          <pointLight position={[0, 1.1, 0.3]} color={glowColor} intensity={1.2} distance={1.6} />
+        )}
       </group>
+
+      {hovered && (
+        <Html position={[0, 1.85, 0]} center distanceFactor={9}>
+          <div className="pointer-events-none whitespace-nowrap border-2 border-tavern-gold bg-tavern-shadow/95 px-2.5 py-1 text-[11px] text-tavern-linen font-mono uppercase tracking-wider shadow-brutal-cobalt">
+            Play Angelic Frick
+          </div>
+        </Html>
+      )}
     </group>
   );
 }

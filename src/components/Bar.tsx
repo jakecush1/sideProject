@@ -11,6 +11,34 @@ import { useGameStore } from "../lib/useGameStore";
 
 const SKIN = "#e8b48c";
 
+// Cartoon eyeballs: white sphere + dark pupil, one pair, centred on `position`
+function Eyes({
+  position,
+  spread = 0.05,
+  size = 0.028,
+}: {
+  position: [number, number, number];
+  spread?: number;
+  size?: number;
+}) {
+  return (
+    <>
+      {[-spread, spread].map((x, i) => (
+        <group key={i} position={[position[0] + x, position[1], position[2]]}>
+          <mesh>
+            <sphereGeometry args={[size, 10, 10]} />
+            <meshStandardMaterial color="#f5f2ea" roughness={0.3} />
+          </mesh>
+          <mesh position={[0, 0, size * 0.75]}>
+            <sphereGeometry args={[size * 0.45, 8, 8]} />
+            <meshStandardMaterial color="#2a1c10" roughness={0.3} />
+          </mesh>
+        </group>
+      ))}
+    </>
+  );
+}
+
 function Tankard({
   position,
   tipped = false,
@@ -212,6 +240,7 @@ function Drunkard({
               <sphereGeometry args={[0.145, 14, 14]} />
               <meshStandardMaterial color={SKIN} roughness={0.6} />
             </mesh>
+            <Eyes position={[0, 0.04, 0.12]} spread={0.05} size={0.026} />
             {/* drunk-flushed nose */}
             <mesh position={[0, -0.01, 0.14]}>
               <sphereGeometry args={[0.035, 8, 8]} />
@@ -301,6 +330,7 @@ function Barkeep() {
           <sphereGeometry args={[0.17, 16, 16]} />
           <meshStandardMaterial color={SKIN} roughness={0.6} />
         </mesh>
+        <Eyes position={[0, 1.57, 0.145]} spread={0.06} size={0.03} />
         {/* rosy cheeks + jolly red nose */}
         {[-0.09, 0.09].map((x) => (
           <mesh key={x} position={[x, 1.5, 0.135]}>
@@ -312,18 +342,28 @@ function Barkeep() {
           <sphereGeometry args={[0.04, 8, 8]} />
           <meshStandardMaterial color="#c86a54" roughness={0.6} />
         </mesh>
-        {/* mustache flowing into a big full beard */}
+        {/* mustache flowing into a huge long beard, spilling down the belly */}
         <mesh position={[0, 1.47, 0.15]}>
-          <boxGeometry args={[0.14, 0.03, 0.04]} />
+          <boxGeometry args={[0.16, 0.035, 0.04]} />
           <meshStandardMaterial color="#6b4a2a" roughness={0.9} />
         </mesh>
-        <mesh position={[0, 1.36, 0.1]} scale={[1, 1.5, 0.8]} castShadow>
+        {/* cascading tiers, each a little narrower, following the belly curve */}
+        <mesh position={[0, 1.36, 0.12]} scale={[1.1, 1.4, 0.8]} castShadow>
+          <sphereGeometry args={[0.14, 12, 10]} />
+          <meshStandardMaterial color="#6b4a2a" roughness={0.95} />
+        </mesh>
+        <mesh position={[0, 1.18, 0.18]} scale={[0.95, 1.4, 0.7]} castShadow>
           <sphereGeometry args={[0.13, 12, 10]} />
           <meshStandardMaterial color="#6b4a2a" roughness={0.95} />
         </mesh>
-        <mesh position={[0, 1.22, 0.08]} scale={[0.7, 1.2, 0.6]}>
+        <mesh position={[0, 0.98, 0.3]} scale={[0.75, 1.4, 0.6]} castShadow>
+          <sphereGeometry args={[0.12, 10, 8]} />
+          <meshStandardMaterial color="#5f4225" roughness={0.95} />
+        </mesh>
+        {/* tapered tip resting on the belly shelf */}
+        <mesh position={[0, 0.8, 0.4]} scale={[0.5, 1.3, 0.5]} castShadow>
           <sphereGeometry args={[0.1, 10, 8]} />
-          <meshStandardMaterial color="#6b4a2a" roughness={0.95} />
+          <meshStandardMaterial color="#5f4225" roughness={0.95} />
         </mesh>
         {/* arms resting toward the counter, rag in hand */}
         <mesh position={[0.3, 1.05, 0.16]} rotation={[0.7, 0, -0.6]} castShadow>
@@ -381,7 +421,7 @@ export default function Bar() {
 
       {/* patrons, in descending order of consciousness */}
       <Drunkard position={[4.95, 0, -1.25]} tunic="#6b5d48" pose="toasting" phase={0} />
-      <Drunkard position={[4.6, 0, -0.1]} tunic="#75654a" pose="floored" phase={2.1} />
+      <Drunkard position={[4.95, 0, -0.1]} tunic="#75654a" pose="toasting" phase={2.1} />
       <Drunkard position={[4.95, 0, 0.95]} tunic="#5d5240" pose="slumped" phase={4.2} />
 
       {/* the evening's casualties: many empty tankards */}

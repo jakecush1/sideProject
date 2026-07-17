@@ -11,7 +11,6 @@ export type ClickableAction = "play-song" | "show-info" | "spawn-bottle";
 export type ClickableObjectKind =
   | "scroll"
   | "goblet"
-  | "tapestry"
   | "barrel"
   | "keg"
   | "coinbag"
@@ -47,15 +46,8 @@ export const clickableObjects: ClickableObject[] = [
     kind: "coinbag",
     position: [0.0, 0.5, 1.9],
   },
-  {
-    id: "tapestry",
-    label: "Play Angelic Frick",
-    action: "play-song",
-    songId: "angelic-frick",
-    kind: "tapestry",
-    position: [0, 2.6, -3.4],
-    scale: 1,
-  },
+  // NOTE: "Angelic Frick" is triggered by clicking the barmaid (see
+  // src/components/Barmaid.tsx), not a static object in this list.
   {
     // Giant old-style mead keg on a side table beside Freddie Munter
     id: "mead-keg",
