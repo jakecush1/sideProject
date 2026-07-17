@@ -42,7 +42,7 @@ export default function Header() {
             <button
               key={item.target}
               onClick={() => scrollTo(item.target)}
-              className="font-medieval text-sm text-tavern-candle/80 hover:text-tavern-candle px-3 py-1.5 rounded-md hover:bg-tavern-gold/10 transition-colors"
+              className="font-mono text-xs uppercase tracking-[0.15em] text-tavern-linen/75 hover:text-tavern-shadow px-3 py-1.5 border-2 border-transparent hover:border-tavern-shadow hover:bg-tavern-gold hover:shadow-brutal-cobalt transition-all"
             >
               {item.label}
             </button>
@@ -53,7 +53,7 @@ export default function Header() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => window.dispatchEvent(new Event("reset-camera"))}
-            className="btn-tavern p-2 rounded-md"
+            className="btn-tavern p-2"
             aria-label="Reset camera view"
             title="Reset camera"
           >
@@ -61,7 +61,7 @@ export default function Header() {
           </button>
           <button
             onClick={handleMute}
-            className="btn-tavern p-2 rounded-md"
+            className="btn-tavern p-2"
             aria-label={muted ? "Unmute audio" : "Mute audio"}
             title={muted ? "Unmute" : "Mute"}
           >

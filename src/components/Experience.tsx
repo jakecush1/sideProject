@@ -10,7 +10,7 @@ import Scene from "./Scene";
 function CanvasLoader() {
   return (
     <Html center>
-      <div className="font-medieval text-tavern-candle text-sm animate-pulse">
+      <div className="font-medieval text-tavern-linen text-sm animate-pulse">
         Tuning lutes…
       </div>
     </Html>
@@ -24,10 +24,10 @@ export default function Experience() {
       dpr={[1, 1.8]}
       camera={{ position: [0, 2.4, 7.5], fov: 45 }}
       gl={{ antialias: true }}
-      // Unify the render into warm sepia ink tones on paper.
-      style={{ filter: "sepia(0.55) saturate(0.7) contrast(0.98) brightness(1.06)" }}
+      // Old-master varnish: warm cast, deeper contrast, slightly crushed blacks.
+      style={{ filter: "sepia(0.3) saturate(0.85) contrast(1.08) brightness(0.96)" }}
     >
-      <color attach="background" args={["#e9dfc6"]} />
+      <color attach="background" args={["#1c130b"]} />
       <Suspense fallback={<CanvasLoader />}>
         <Scene />
       </Suspense>

@@ -21,18 +21,21 @@ export default function BandMemberPanel() {
 
   return (
     <div className="pointer-events-auto absolute top-20 right-4 z-40 w-[290px] max-w-[calc(100vw-2rem)] animate-fade-in">
-      <div className="parchment rounded-xl p-5">
+      <div className="parchment p-5">
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex items-center gap-3">
+            {/* Portrait tile — framed like a tiny gallery piece */}
             <div
-              className="w-11 h-11 rounded-full border-2 border-tavern-gold/50 shrink-0"
+              className="w-11 h-11 border-2 border-tavern-shadow shadow-brutal-blood shrink-0"
               style={{ background: member.color }}
             />
             <div>
-              <h3 className="font-medieval gold-text text-base leading-tight">
+              <h3 className="font-medieval gold-text text-base font-bold leading-tight">
                 {member.name}
               </h3>
-              <p className="text-tavern-candle/60 text-xs">{member.instrument}</p>
+              <p className="font-mono text-tavern-cobalt text-[11px] uppercase tracking-wider">
+                {member.instrument}
+              </p>
             </div>
           </div>
           <button
@@ -49,14 +52,14 @@ export default function BandMemberPanel() {
         </p>
 
         <div className="flex items-center gap-2">
-          <span className="text-[10px] uppercase tracking-wider text-tavern-gold/60">
+          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-tavern-stone">
             Status
           </span>
           <span
-            className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+            className={`font-mono text-[11px] font-medium px-2 py-0.5 border-2 border-tavern-shadow ${
               state === "Playing"
-                ? "bg-tavern-gold/20 text-tavern-candle"
-                : "bg-tavern-velvet/40 text-tavern-candle/80"
+                ? "bg-tavern-moss text-tavern-ice"
+                : "bg-tavern-velvet text-tavern-linen"
             }`}
           >
             {state === "Playing" ? `Playing ${song?.title}` : "Featured"}

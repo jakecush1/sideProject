@@ -42,21 +42,40 @@ export default function App() {
         <Experience />
       </div>
 
-      {/* Aged-paper overlay: bleached worn edges + fine grain, over the canvas */}
+      {/* Chiaroscuro vignette: the scene falls off into oil-painting darkness */}
       <div
         className="fixed inset-0 z-10 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 45%, transparent 48%, rgba(236,226,203,0.5) 82%, rgba(228,216,186,0.85) 100%)",
+            "radial-gradient(ellipse at 50% 42%, transparent 42%, rgba(23,17,11,0.5) 78%, rgba(14,10,6,0.92) 100%)",
         }}
       />
+      {/* Canvas grain — cracked-varnish noise over everything */}
       <div
         className="fixed inset-0 z-10 pointer-events-none"
         style={{
-          mixBlendMode: "multiply",
-          opacity: 0.5,
+          mixBlendMode: "overlay",
+          opacity: 0.45,
           backgroundImage:
             "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E\")",
+        }}
+      />
+      {/* Etching crosshatch — engraving-plate diagonal strokes */}
+      <div
+        className="fixed inset-0 z-10 pointer-events-none"
+        style={{
+          mixBlendMode: "soft-light",
+          opacity: 0.35,
+          backgroundImage:
+            "repeating-linear-gradient(45deg, rgba(233,220,190,0.5) 0 1px, transparent 1px 7px), repeating-linear-gradient(-45deg, rgba(18,13,6,0.6) 0 1px, transparent 1px 9px)",
+        }}
+      />
+      {/* Gilded ebony frame around the viewport — ink, gold pinline, ink */}
+      <div
+        className="fixed inset-0 z-[70] pointer-events-none"
+        style={{
+          boxShadow:
+            "inset 0 0 0 4px #120d06, inset 0 0 0 5px #c68a2c, inset 0 0 0 7px #120d06, inset 0 0 60px rgba(0,0,0,0.55)",
         }}
       />
 

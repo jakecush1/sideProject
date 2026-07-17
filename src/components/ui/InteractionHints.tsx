@@ -21,10 +21,10 @@ export default function InteractionHints() {
 
   return (
     <div className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 z-30 hidden sm:block">
-      <div className="parchment rounded-full px-5 py-2.5">
-        <p className="text-tavern-candle/85 text-xs sm:text-sm text-center">
-          Click <span className="text-tavern-gold">glowing objects</span> to change songs ·
-          Click the <span className="text-tavern-gold">room</span> to drop beer bottles
+      <div className="placard px-5 py-2.5">
+        <p className="font-mono text-[11px] sm:text-xs text-center tracking-wide">
+          Click <span className="text-tavern-gold font-semibold">glowing objects</span> to change songs ·
+          Click the <span className="text-tavern-gold font-semibold">room</span> to drop beer bottles
         </p>
       </div>
     </div>

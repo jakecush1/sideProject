@@ -49,12 +49,12 @@ export default function SongPanel() {
 
   return (
     <div className="pointer-events-auto absolute bottom-4 left-4 z-40 w-[300px] max-w-[calc(100vw-2rem)]">
-      <div className="parchment rounded-xl overflow-hidden">
+      <div className="parchment overflow-hidden">
         {/* Header bar */}
-        <div className="flex items-center justify-between px-4 py-2.5 border-b border-tavern-gold/20">
+        <div className="flex items-center justify-between px-4 py-2.5 border-b-2 border-tavern-shadow bg-tavern-gold/20">
           <div className="flex items-center gap-2">
-            <Music size={15} className="text-tavern-gold" />
-            <span className="font-medieval text-sm gold-text">Songs of the Tavern</span>
+            <Music size={15} className="text-tavern-velvet" />
+            <span className="font-medieval text-sm font-bold gold-text">Songs of the Tavern</span>
           </div>
           <button
             onClick={() => setCollapsed(!collapsed)}
@@ -67,14 +67,14 @@ export default function SongPanel() {
 
         {/* Now playing */}
         <div className="px-4 py-3">
-          <p className="text-[10px] uppercase tracking-wider text-tavern-gold/60 mb-0.5">
-            {isPlaying ? "Now Playing" : "Paused"}
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-tavern-cobalt mb-0.5">
+            {isPlaying ? "▶ Now Playing" : "❚❚ Paused"}
           </p>
           <p className="font-medieval text-tavern-candle text-base leading-tight truncate">
             {song ? song.title : "Nothing yet — pick a tune"}
           </p>
           {song && (
-            <p className="text-tavern-candle/50 text-xs mt-0.5 capitalize">
+            <p className="font-mono text-tavern-stone text-[11px] mt-0.5 capitalize">
               {song.mood} · {song.bpm} bpm
             </p>
           )}
@@ -83,14 +83,14 @@ export default function SongPanel() {
           <div className="flex items-center gap-2 mt-3">
             <button
               onClick={handlePlayPause}
-              className="btn-tavern p-2 rounded-full"
+              className="btn-tavern p-2"
               aria-label={isPlaying ? "Pause" : "Play"}
             >
               {isPlaying ? <Pause size={16} /> : <Play size={16} />}
             </button>
             <button
               onClick={nextSong}
-              className="btn-tavern p-2 rounded-full"
+              className="btn-tavern p-2"
               aria-label="Next song"
             >
               <SkipForward size={16} />
@@ -112,23 +112,23 @@ export default function SongPanel() {
 
         {/* Song list */}
         {!collapsed && (
-          <div className="border-t border-tavern-gold/20 max-h-44 overflow-y-auto tavern-scroll">
+          <div className="border-t-2 border-tavern-shadow max-h-44 overflow-y-auto tavern-scroll">
             {songs.map((s) => {
               const active = s.id === currentSongId;
               return (
                 <button
                   key={s.id}
                   onClick={() => selectSong(s.id)}
-                  className={`w-full text-left px-4 py-2.5 flex items-center gap-2.5 transition-colors ${
+                  className={`w-full text-left px-4 py-2.5 flex items-center gap-2.5 transition-colors border-l-4 ${
                     active
-                      ? "bg-tavern-gold/15"
-                      : "hover:bg-tavern-gold/8"
+                      ? "bg-tavern-gold/25 border-tavern-cobalt"
+                      : "border-transparent hover:bg-tavern-gold/10 hover:border-tavern-velvet"
                   }`}
                 >
                   <span
-                    className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                    className={`w-1.5 h-1.5 shrink-0 ${
                       active && isPlaying
-                        ? "bg-tavern-gold animate-pulse"
+                        ? "bg-tavern-cobalt animate-pulse"
                         : "bg-tavern-candle/30"
                     }`}
                   />
