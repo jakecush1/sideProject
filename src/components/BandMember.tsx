@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
-import { TextureLoader, SRGBColorSpace } from "three";
-import type { Group, Texture } from "three";
+import type { Group } from "three";
 import type { BandMember as BandMemberData } from "../data/bandMembers";
 import { useGameStore } from "../lib/useGameStore";
 import { getSong } from "../data/songs";
@@ -27,40 +26,6 @@ const MOOD_ENERGY: Record<string, number> = {
   melancholy: 0.3,
 };
 
-// Loads the member's photo as a face texture, center-cropped square (biased
-// toward the top of portrait shots, where faces live). Resolves to null if
-// the file doesn't exist yet, so members render faceless rather than crash.
-function useFaceTexture(url?: string) {
-  const [tex, setTex] = useState<Texture | null>(null);
-  useEffect(() => {
-    if (!url) return;
-    let alive = true;
-    new TextureLoader().load(
-      url,
-      (t) => {
-        if (!alive) return;
-        t.colorSpace = SRGBColorSpace;
-        const img = t.image as HTMLImageElement;
-        const aspect = img.width / img.height;
-        if (aspect < 1) {
-          t.repeat.set(1, aspect);
-          t.offset.set(0, (1 - aspect) * 0.8);
-        } else {
-          t.repeat.set(1 / aspect, 1);
-          t.offset.set((1 - 1 / aspect) / 2, 0);
-        }
-        setTex(t);
-      },
-      undefined,
-      () => {}
-    );
-    return () => {
-      alive = false;
-    };
-  }, [url]);
-  return tex;
-}
-
 export default function BandMember({ member, index }: Props) {
   const group = useRef<Group>(null);
   const leftArm = useRef<Group>(null);
@@ -68,7 +33,6 @@ export default function BandMember({ member, index }: Props) {
   const head = useRef<Group>(null);
 
   const [hovered, setHovered] = useState(false);
-  const faceTexture = useFaceTexture(member.photo);
 
   const isPlaying = useGameStore((s) => s.isPlaying);
   const currentSongId = useGameStore((s) => s.currentSongId);
@@ -170,18 +134,38 @@ export default function BandMember({ member, index }: Props) {
         />
       </mesh>
 
-      {/* Head (group so the face decal bobs with it) */}
+      {/* Head */}
       <group ref={head} position={[0, 1.08, 0]}>
         <mesh castShadow>
-          <sphereGeometry args={[0.17, 16, 16]} />
+          <sphereGeometry args={[0.17, 24, 24]} />
           <meshStandardMaterial color="#e8c9a0" roughness={0.6} />
         </mesh>
-        {/* Face decal — the member's photo as a round portrait medallion */}
-        {faceTexture && (
-          <mesh position={[0, 0.01, 0.135]}>
-            <circleGeometry args={[0.115, 24]} />
-            <meshStandardMaterial map={faceTexture} roughness={0.85} />
-          </mesh>
+        {/* Long hair hanging from under the hat, down past the shoulders */}
+        {member.hairColor && (
+          <group>
+            {/* back curtain */}
+            <mesh position={[0, -0.14, -0.12]} rotation={[0.12, 0, 0]} castShadow>
+              <boxGeometry args={[0.26, 0.46, 0.07]} />
+              <meshStandardMaterial color={member.hairColor} roughness={0.9} />
+            </mesh>
+            {/* side strands framing the face */}
+            {[-1, 1].map((side) => (
+              <mesh
+                key={side}
+                position={[side * 0.155, -0.16, 0.02]}
+                rotation={[0, 0, side * -0.08]}
+                castShadow
+              >
+                <boxGeometry args={[0.07, 0.42, 0.11]} />
+                <meshStandardMaterial color={member.hairColor} roughness={0.9} />
+              </mesh>
+            ))}
+            {/* crown fringe peeking out under the hat brim */}
+            <mesh position={[0, 0.05, -0.05]}>
+              <sphereGeometry args={[0.175, 12, 10, 0, Math.PI * 2, Math.PI * 0.35, Math.PI * 0.35]} />
+              <meshStandardMaterial color={member.hairColor} roughness={0.9} />
+            </mesh>
+          </group>
         )}
       </group>
 
@@ -210,8 +194,18 @@ export default function BandMember({ member, index }: Props) {
         </mesh>
       </group>
 
-      {/* Instrument held in front */}
-      <group position={[0, 0.55, 0.2]}>
+      {/* Instrument held in front. The organ is furniture, not part of the
+          player — swallow its pointer events so only Joan himself is
+          clickable, not the whole console. */}
+      <group
+        position={[0, 0.55, 0.2]}
+        {...(member.instrumentType === "organ"
+          ? {
+              onClick: (e: { stopPropagation: () => void }) => e.stopPropagation(),
+              onPointerOver: (e: { stopPropagation: () => void }) => e.stopPropagation(),
+            }
+          : {})}
+      >
         <Instrument
           type={member.instrumentType}
           playing={isPlaying && !!song}

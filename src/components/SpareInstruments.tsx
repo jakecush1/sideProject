@@ -2,15 +2,9 @@
 // Side arsenals resting on the floor, built from primitives to match the
 // other procedural instruments:
 // - Babe Needleman (at [-0.8, 0, -1.4]): banjo + accordion
-// - Freddie Munter (at [2.2, 0, 0.6]): hand drum by his boot
 
 export default function SpareInstruments() {
-  return (
-    <>
-      <BabeGear />
-      <FreddieDrum />
-    </>
-  );
+  return <BabeGear />;
 }
 
 function BabeGear() {
@@ -92,24 +86,6 @@ function BabeGear() {
         <mesh position={[0.17, -0.14, 0]}>
           <boxGeometry args={[0.09, 0.012, 0.18]} />
           <meshStandardMaterial color="#a8781f" metalness={0.5} roughness={0.4} />
-        </mesh>
-      </group>
-    </group>
-  );
-}
-
-function FreddieDrum() {
-  return (
-    <group position={[2.95, 0, 0.3]} rotation={[0, -0.5, 0]}>
-      {/* hand drum tilted against the floor by Freddie's stool */}
-      <group position={[0, 0.17, 0]} rotation={[1.3, 0, 0.18]}>
-        <mesh castShadow>
-          <cylinderGeometry args={[0.26, 0.26, 0.12, 20]} />
-          <meshStandardMaterial color="#6b4423" roughness={0.7} />
-        </mesh>
-        <mesh position={[0, 0.061, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <circleGeometry args={[0.255, 20]} />
-          <meshStandardMaterial color="#d9c2a0" roughness={0.8} />
         </mesh>
       </group>
     </group>

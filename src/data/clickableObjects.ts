@@ -13,6 +13,9 @@ export type ClickableObjectKind =
   | "goblet"
   | "tapestry"
   | "barrel"
+  | "keg"
+  | "coinbag"
+  | "bread"
   | "candle";
 
 export type ClickableObject = {
@@ -27,19 +30,21 @@ export type ClickableObject = {
 
 export const clickableObjects: ClickableObject[] = [
   {
-    id: "song-scroll",
+    // Pile of rustic loaves on the ground in front of J Hole — peasant fare
+    id: "bread-loaf",
     label: "Play Serfs and Wenches",
     action: "play-song",
     songId: "serfs-and-wenches",
-    kind: "scroll",
-    position: [-1.6, 0.46, 1.7],
+    kind: "bread",
+    position: [-1.65, 0, 1.35],
   },
   {
-    id: "goblet",
+    // Bag of gold coins on the central table — taxes, presumably
+    id: "coin-bag",
     label: "Play Feudal Taxation",
     action: "play-song",
     songId: "feudal-taxation",
-    kind: "goblet",
+    kind: "coinbag",
     position: [0.0, 0.5, 1.9],
   },
   {
@@ -52,11 +57,12 @@ export const clickableObjects: ClickableObject[] = [
     scale: 1,
   },
   {
-    id: "barrel",
+    // Giant old-style mead keg on a side table beside Freddie Munter
+    id: "mead-keg",
     label: "Play Yennifer Holepez",
     action: "play-song",
     songId: "yennifer-holepez",
-    kind: "barrel",
-    position: [3.1, 0.0, -2.2],
+    kind: "keg",
+    position: [3.5, 0.0, 1.2],
   },
 ];

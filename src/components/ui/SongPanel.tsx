@@ -59,13 +59,14 @@ export default function SongPanel() {
           <button
             onClick={() => setCollapsed(!collapsed)}
             className="text-tavern-candle/60 hover:text-tavern-candle"
-            aria-label={collapsed ? "Expand song panel" : "Collapse song panel"}
+            aria-label={collapsed ? "Expand song panel" : "Minimize song panel"}
           >
             {collapsed ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           </button>
         </div>
 
-        {/* Now playing */}
+        {/* Now playing (hidden when minimized — only the header tab stays) */}
+        {!collapsed && (
         <div className="px-4 py-3">
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-tavern-cobalt mb-0.5">
             {isPlaying ? "▶ Now Playing" : "❚❚ Paused"}
@@ -109,6 +110,7 @@ export default function SongPanel() {
             />
           </div>
         </div>
+        )}
 
         {/* Song list */}
         {!collapsed && (

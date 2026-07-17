@@ -4,6 +4,7 @@ import { useGameStore } from "../lib/useGameStore";
 import TavernEnvironment from "./TavernEnvironment";
 import BandCircle from "./BandCircle";
 import SpareInstruments from "./SpareInstruments";
+import Horse from "./Horse";
 import ClickableObject from "./ClickableObject";
 import BottleSpawner from "./BottleSpawner";
 import LightingRig from "./LightingRig";
@@ -35,6 +36,7 @@ export default function Scene() {
       <TavernEnvironment />
       <BandCircle />
       <SpareInstruments />
+      <Horse />
 
       {clickableObjects.map((obj) => (
         <ClickableObject key={obj.id} object={obj} />

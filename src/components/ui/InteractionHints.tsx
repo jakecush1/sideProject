@@ -20,9 +20,11 @@ export default function InteractionHints() {
   if (!visible) return null;
 
   return (
-    <div className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 z-30 hidden sm:block">
-      <div className="placard px-5 py-2.5">
-        <p className="font-mono text-[11px] sm:text-xs text-center tracking-wide">
+    // Mobile: under the header, full-width band (bottom is the song panel's).
+    // sm–lg: bottom band right of the 300px song panel. xl+: true center.
+    <div className="pointer-events-none absolute z-30 flex justify-center top-16 left-3 right-3 sm:top-auto sm:bottom-4 sm:left-[336px] sm:right-28 xl:left-1/2 xl:right-auto xl:-translate-x-1/2">
+      <div className="placard px-4 py-2 sm:px-5 sm:py-2.5">
+        <p className="font-mono text-[10px] sm:text-xs text-center tracking-wide">
           Click <span className="text-tavern-gold font-semibold">glowing objects</span> to change songs ·
           Click the <span className="text-tavern-gold font-semibold">room</span> to drop beer bottles
         </p>

@@ -15,6 +15,8 @@ export type BandMember = {
   hatColor: string;
   photo?: string; // portrait in /public/band — drop a jpg at this path
   face?: string; // transparent head cutout in /public/band/Heads (3D face decal)
+  hairColor?: string; // when set, renders long hair hanging from under the hat
+  build?: "lanky"; // body type; default is the standard stout minstrel
   position: [number, number, number];
   rotation: [number, number, number];
 };
@@ -42,6 +44,9 @@ export const bandMembers: BandMember[] = [
     color: "#2e5d54", // teal aztec fleece
     hatColor: "#b55a1f", // burnt-orange beanie
     photo: "/band/babeNeedleman2.jpg",
+    face: "/band/Heads/babe-face.png",
+    hairColor: "#c9a35c", // long blonde hair
+    build: "lanky", // tall, skinny, long-limbed
     position: [-0.8, 0, -1.4],
     rotation: [0, 0.25, 0],
   },
@@ -54,6 +59,7 @@ export const bandMembers: BandMember[] = [
     color: "#22333d", // navy-black tee
     hatColor: "#12888a", // teal-brim cap
     photo: "/band/AdmiralJoan.jpg",
+    face: "/band/Heads/admiral-face.png",
     position: [0.8, 0, -1.4],
     // Faces away from the circle, into the organ, like a proper organist
     rotation: [0, Math.PI - 0.25, 0],
@@ -63,10 +69,11 @@ export const bandMembers: BandMember[] = [
     name: "Freddie Munter",
     instrument: "Lute & Guitar",
     instrumentType: "lute",
-    bio: "Freddie Munter picks the lute like a guitar and keeps a hand drum by his boot. He claims the lute was carved from a tree that 'remembered every song it ever heard,' and is suspiciously good at proving it.",
+    bio: "Freddie Munter picks the lute like a guitar. He claims it was carved from a tree that 'remembered every song it ever heard,' and is suspiciously good at proving it.",
     color: "#8f2b22", // oxblood hoodie
     hatColor: "#2e2018", // dark curls
     photo: "/band/freddieMunter.jpg",
+    face: "/band/Heads/freddie-face.png",
     position: [2.2, 0, 0.6],
     rotation: [0, -0.6, 0],
   },
